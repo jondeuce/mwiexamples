@@ -1,5 +1,2 @@
 [deps]
 MyelinWaterImaging = "4d91e7b4-b09d-49e8-8bd6-38649934c439"
-NonNegLeastSquares = "b7351bd1-99d9-5c5d-8786-f205a815c4d7"
-OhMyREPL = "5fb14364-9ced-5910-84b2-373655c76a03"
-Revise = "295af30f-e4ad-537b-8983-00126c2a3abe"

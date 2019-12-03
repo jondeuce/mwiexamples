@@ -57,12 +57,6 @@ git-tree-sha1 = "f641eb0a4f00c343bbc32346e1217b86f3ce9dad"
 uuid = "49dc2e85-a5d0-5ad3-a950-438e2897f1b9"
 version = "0.5.1"
 
-[[CodeTracking]]
-deps = ["InteractiveUtils", "UUIDs"]
-git-tree-sha1 = "0becdab7e6fbbcb7b88d8de5b72e5bb2f28239f3"
-uuid = "da1fd8a2-8d9e-5ec2-8556-3022fb5608a2"
-version = "0.5.8"
-
 [[CodecZlib]]
 deps = ["BinaryProvider", "Libdl", "TranscodingStreams"]
 git-tree-sha1 = "05916673a2627dd91b4969ff8ba6941bc85a960e"
@@ -80,11 +74,6 @@ deps = ["Base64", "Dates", "DelimitedFiles", "Distributed", "InteractiveUtils", 
 git-tree-sha1 = "ed2c4abadf84c53d9e58510b5fc48912c2336fbb"
 uuid = "34da2185-b29b-5c13-b0c7-acf172513d20"
 version = "2.2.0"
-
-[[Crayons]]
-git-tree-sha1 = "cb7a62895da739fe5bb43f1a26d4292baf4b3dc0"
-uuid = "a8cc5b0e-0ffa-5ad4-8c14-923d3ee1735f"
-version = "4.0.1"
 
 [[DataAPI]]
 git-tree-sha1 = "674b67f344687a88310213ddfa8a2b3c76cc4252"
@@ -145,9 +134,6 @@ git-tree-sha1 = "6c976460b85527d22d979682222d36767d95e27f"
 uuid = "5789e2e9-d7fb-5bc7-8068-2c6fae9b9549"
 version = "1.1.0"
 
-[[FileWatching]]
-uuid = "7b1f6079-737a-58dc-b8bc-7a2ca5c1b5ee"
-
 [[FillArrays]]
 deps = ["LinearAlgebra", "Random", "SparseArrays"]
 git-tree-sha1 = "1a9fe4e1323f38de0ba4da49eafd15b25ec62298"
@@ -176,12 +162,6 @@ version = "0.12.5"
 deps = ["Markdown"]
 uuid = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
 
-[[JuliaInterpreter]]
-deps = ["CodeTracking", "InteractiveUtils", "Random", "UUIDs"]
-git-tree-sha1 = "5bb6a8b09d881c1cbe39bd8135667ed5978168e9"
-uuid = "aa1ae85d-cabe-5617-a682-6adf51b2e16a"
-version = "0.7.4"
-
 [[LibGit2]]
 uuid = "76f85450-5226-5b5a-8eaa-529ad045b433"
 
@@ -200,12 +180,6 @@ uuid = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 
 [[Logging]]
 uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
-
-[[LoweredCodeUtils]]
-deps = ["JuliaInterpreter"]
-git-tree-sha1 = "b416a30717e9109fffd4d9869f2f962b5dca3162"
-uuid = "6f1432cf-f94c-5a45-995e-cdbf5db27b0b"
-version = "0.4.2"
 
 [[MAT]]
 deps = ["BufferedStreams", "CodecZlib", "HDF5", "SparseArrays"]
@@ -228,7 +202,9 @@ uuid = "a63ad114-7e13-5084-954f-fe012c677804"
 
 [[MyelinWaterImaging]]
 deps = ["ArgParse", "Dierckx", "DrWatson", "LinearAlgebra", "MAT", "NIfTI", "NonNegLeastSquares", "Optim", "Parameters", "Random", "Roots", "SIMD", "SpecialFunctions", "StaticArrays", "Statistics", "TimerOutputs"]
-path = "../MyelinWaterImaging"
+git-tree-sha1 = "69bcb995a1bc9630d6cae0b6b2ca97a10dd39c80"
+repo-rev = "master"
+repo-url = "https://github.com/jondeuce/MyelinWaterImaging.jl.git"
 uuid = "4d91e7b4-b09d-49e8-8bd6-38649934c439"
 version = "0.1.0"
 
@@ -253,15 +229,9 @@ version = "0.3.3"
 deps = ["Distributed", "LinearAlgebra", "SparseArrays"]
 git-tree-sha1 = "c303ec57c2fb9d7103e17cf78dffae408c3b4d6f"
 repo-rev = "master"
-repo-url = "https://github.com/jondeuce/NonNegLeastSquares.jl"
+repo-url = "https://github.com/jondeuce/NonNegLeastSquares.jl.git"
 uuid = "b7351bd1-99d9-5c5d-8786-f205a815c4d7"
 version = "0.2.0"
-
-[[OhMyREPL]]
-deps = ["Crayons", "Markdown", "Pkg", "Printf", "REPL", "Tokenize"]
-git-tree-sha1 = "8857a079cb486e1f4f148a616505743ede7ec95c"
-uuid = "5fb14364-9ced-5910-84b2-373655c76a03"
-version = "0.5.3"
 
 [[OpenSpecFun_jll]]
 deps = ["Libdl", "Pkg"]
@@ -314,12 +284,6 @@ deps = ["Test"]
 git-tree-sha1 = "f6fbf4ba64d295e146e49e021207993b6b48c7d1"
 uuid = "ae029012-a4dd-5104-9daa-d747884805df"
 version = "0.5.2"
-
-[[Revise]]
-deps = ["CodeTracking", "Distributed", "FileWatching", "JuliaInterpreter", "LibGit2", "LoweredCodeUtils", "OrderedCollections", "Pkg", "REPL", "UUIDs", "Unicode"]
-git-tree-sha1 = "dd15b92fac79835f8d87d03522ad861ff40c7459"
-uuid = "295af30f-e4ad-537b-8983-00126c2a3abe"
-version = "2.3.1"
 
 [[Roots]]
 deps = ["Printf"]
@@ -393,11 +357,6 @@ deps = ["Printf"]
 git-tree-sha1 = "311765af81bbb48d7bad01fb016d9c328c6ede03"
 uuid = "a759f4b9-e2f1-59dc-863e-4aeb61b1ea8f"
 version = "0.5.3"
-
-[[Tokenize]]
-git-tree-sha1 = "c3aab236f122445406cf7a6de8af0b794da5a950"
-uuid = "0796e94c-ce3b-5d07-9a54-7f471281c624"
-version = "0.5.7"
 
 [[TranscodingStreams]]
 deps = ["Random", "Test"]
