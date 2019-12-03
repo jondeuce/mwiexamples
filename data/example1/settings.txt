@@ -1,0 +1,7 @@
+./data/images/image-175x140x1x56.nii.gz
+--output
+./output/example1/
+--T2map
+--T2part
+--TE
+0.007
