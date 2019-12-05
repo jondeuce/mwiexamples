@@ -12,18 +12,25 @@ $ julia my_script.jl <COMMAND LINE ARGS>
 
 For an illustration of why one may be interested in using MyelinWaterImaging.jl and/or Julia, here is a comparison of the T2-distribution computation times between Julia and MATLAB:
 
-* 48 echo CPMG sequence, matrix size 240 x 240 x 48, using default parameters:
-    * MATLAB: 2h:53m:13s
-    * Julia: **4m:25s**
-* 56 echo CPMG sequence, matrix size 240 x 240 x 113, using default parameters:
-    * MATLAB: 9h:35m:17s
-    * Julia: **14m:36s**
+<center>
+
+| Dataset      | Image Size           | MATLAB      | Julia       |
+| :---:        | :---:                | :---:       | :---:       |
+| 48-echo CPMG | 240 x 240 x 48 x 48  | 2h:53m:13s  | **4m:25s**  |
+| 56-echo CPMG | 240 x 240 x 113 x 48 | 9h:35m:17s  | **14m:36s** |
+
+</center>
 
 For more benchmarks, and for benchmarking details, see [MyelinWaterImaging.jl](https://github.com/jondeuce/MyelinWaterImaging.jl#benchmarks).
 
 ## Installation
 
-### Cloning this repository
+### (Optional) cloning this repository
+
+This repository provides example data and an example script `my_script.jl`.
+It is not required to clone this repository to use MyelinWaterImaging.jl.
+
+If you would like to make use of the example data and/or script, there are two ways to clone this repository:
 
 1. Clone `mwiexamples` using `git` from the command line by executing the following command in the terminal:
 
@@ -32,12 +39,14 @@ For more benchmarks, and for benchmarking details, see [MyelinWaterImaging.jl](h
     ```
 2. Click the `Clone or download` button in the top right of this page to download a `.zip` file of the repository contents
 
-### Installing Julia
+### Downloading Julia
 
-To run these examples, Julia version 1.3.0 or higher is required:
+To use MyelinWaterImaging.jl, Julia version 1.3.0 or higher is required:
 
 1. Visit the [Julia downloads page](https://julialang.org/downloads/) and download Julia v1.3.0 or higher for your operating system.
 2. After placing the downloaded folder (named e.g. `julia-1.3.0`) in an appropriate location, add the `julia` executable (located in e.g. `julia-1.3.0/bin/julia`) to your path
+
+Julia 1.3.0 introduced [multithreading capabilities](https://julialang.org/blog/2019/07/multithreading), used by MyelinWaterImaging.jl, that greatly reduce computation time.
 
 ### Installing MyelinWaterImaging.jl
 
@@ -52,13 +61,17 @@ There are two ways to install MyelinWaterImaging.jl:
     Once the package is finished installing, type the backspace key to exit the package manager REPL mode (the `julia>` prompt should reappear).
     Exit Julia using the keyboard shortcut `Ctrl+D`, or `⌘-D` on OSX, or by typing `exit()`.
 
-2. Create a script which will automatically install MyelinWaterImaging.jl when used with the command line interface (see below).
+2. Use the example script `my_script.jl` provided by this repository which will automatically install MyelinWaterImaging.jl when used with the command line interface (see below).
 
 ## Command Line Interface (CLI)
 
 This toolbox provides a command line interface (CLI) for processing from the terminal.
-The CLI takes as input `.nii`, `.nii.gz`, or `.mat` files - or folders containing such files - and performs one or both of T2-distribution computation and T2-parts analysis, the latter of which performs post-processing of the T2-distribution to calculate parameters such as the myelin water fraction (MWF).
-See the [documentation](https://jondeuce.github.io/MyelinWaterImaging.jl/dev/cli) for API details.
+Using the CLI does not require any knowledge of Julia, only the installation steps above need to be completed.
+One could compute myelin water fraction (MWF) maps using `julia` from the command line, and then continue on using the programming language of one's choice.
+
+The CLI takes as input `.nii`, `.nii.gz`, or `.mat` files - or folders containing such files - and performs one or both of T2-distribution computation and T2-parts analysis, the latter of which performs post-processing of the T2-distribution to calculate parameters such as the MWF.
+Data must be stored as (x, y, z, echo) for multi-echo input data, or (x, y, z, T2 bin) for T2-distribution input data.
+See the [documentation](https://jondeuce.github.io/MyelinWaterImaging.jl/dev/cli) for more API details.
 
 In order to call the command line interface one must first create a Julia script which loads MyelinWaterImaging.jl and calls the entrypoint function `main()`.
 For example, the script `my_script.jl` provided by this repository contains a more heavily commented version of the following:
@@ -84,13 +97,13 @@ $ export JULIA_NUM_THREADS=4
 $ julia my_script.jl data/images/image-175x140x1x56.nii.gz --T2map --T2part --TE 0.007 --output output/basic/
 ```
 
-The first line sets the environment variable `JULIA_NUM_THREADS` to enable multithreading within Julia.
+The first line sets the environment variable `JULIA_NUM_THREADS` to enable multithreading within Julia (4 threads in this example).
 The second line calls `julia` on `my_script.jl` as follows:
 
-* The image file `data/images/image-175x140x1x56.nii.gz` is passed as the first argument
+* The 4D image file `data/images/image-175x140x1x56.nii.gz` is passed as the first argument
 * The flags `--T2map` and `--T2part` are passed, indicating that both T2-distribution computation and T2-parts analysis (to compute e.g. the myelin water fraction) should be performed
-* The flag `--TE` is passed with argument `0.007`, setting the echo time to 7ms
-* The flag `--output` is passed with a folder `output/basic/`; T2-distribution and T2-parts results will be stored here
+* The flag `--TE` is passed with argument `0.007` in this example, setting the echo times to 7 ms, 14 ms, ...
+* The flag `--output` is passed with a folder `output/basic/`; The folder output/basic will be created and the T2-distribution and T2-parts results will be stored there.
 
 See the [arguments](https://jondeuce.github.io/MyelinWaterImaging.jl/dev/cli/#Arguments-1) section of the documentation for more information on command line arguments.
 
@@ -116,7 +129,9 @@ $ export JULIA_NUM_THREADS=4
 $ julia my_script.jl @data/example1/settings.txt
 ```
 
-These results will be stored in the folder `output/example1/`, as detailed in the settings file `data/example1/settings.txt`.
+These results will be stored in the folder `output/example1/`, as per the settings file `data/example1/settings.txt`.
+
+For more information on creating settings files, see the [documentation](https://jondeuce.github.io/MyelinWaterImaging.jl/dev/cli/#Settings-files-1).
 
 ### Example script
 
