@@ -59,7 +59,7 @@ There are two ways to install MyelinWaterImaging.jl:
     ```
 
     Once the package is finished installing, type the backspace key to exit the package manager REPL mode (the `julia>` prompt should reappear).
-    Exit Julia using the keyboard shortcut `Ctrl+D`, or `⌘-D` on OSX, or by typing `exit()`.
+    Exit Julia using the keyboard shortcut `Ctrl+D`, or by typing `exit()`.
 
 2. Use the example script `my_script.jl` provided by this repository which will automatically install MyelinWaterImaging.jl when used with the command line interface (see below).
 
