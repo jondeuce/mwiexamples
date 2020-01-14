@@ -1,0 +1,11 @@
+./data/images/image-175x140x1x56.nii.gz
+./data/images/image-175x140x8x56.nii.gz
+--output
+./output/example3/
+--mask
+./data/masks/image-175x140x1x56_mask.nii.gz
+./data/masks/image-175x140x8x56_mask.nii.gz
+--T2map
+--T2part
+--TE
+0.007

@@ -9,13 +9,20 @@
 export JULIA_NUM_THREADS=4
 
 # Example #1
-#   Process the image `image-175x140x1x56.nii.gz` in the data/images/
-#   folder, storing output results to data/output/example1/
+#   Process the image `data/images/image-175x140x1x56.nii.gz`.
+#   Results are stored in data/output/example1/
 echo; echo; echo '-------- EXAMPLE #1 --------'; echo; echo
-julia decaes.jl @data/example1/settings.txt
+julia decaes.jl @data/example1.txt
 
 # Example #2
-#   Process all images in the data/images/ folder, storing output
-#   results to data/output/example2/
+#   Process the image `data/images/image-175x140x8x56.nii.gz` using the
+#   corresponding mask file `data/masks/image-175x140x8x56_mask.nii.gz`.
+#   Results are stored in data/output/example2/
 echo; echo; echo '-------- EXAMPLE #2 --------'; echo; echo
-julia decaes.jl @data/example2/settings.txt
+julia decaes.jl @data/example2.txt
+
+# Example #3
+#   Process both images in `data/images/` using the corresponding masks in
+#   `data/masks/`. Results are stored in data/output/example3/
+echo; echo; echo '-------- EXAMPLE #3 --------'; echo; echo
+julia decaes.jl @data/example3.txt

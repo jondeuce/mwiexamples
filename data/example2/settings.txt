@@ -1,7 +1,0 @@
-./data/images/
---output
-./output/example2/
---T2map
---T2part
---TE
-0.007
