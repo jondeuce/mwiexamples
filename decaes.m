@@ -3,6 +3,13 @@ function status = decaes(nthreads, varargin)
 % Call out to the DECAES command line tool. The Julia executable `julia`
 % must be on your system path.
 % 
+% See the online documentation for more information on DECAES:
+%   https://jondeuce.github.io/DECAES.jl/dev/
+% 
+% See the mwiexamples github repository for myelin water imaging examples,
+% including sample data:
+%   https://github.com/jondeuce/mwiexamples
+% 
 % INPUTS:
 %   nthreads:   Number of Julia threads to run analysis on; may be a string
 %               or an integer
@@ -15,15 +22,41 @@ function status = decaes(nthreads, varargin)
 %   status:     (optional) System call status; see SYSTEM for details
 % 
 % EXAMPLES:
-%   Run DECAES with 4 threads on 'image.nii.gz', setting the echo time,
-%   T2 Range, and number of T2 bins:
-%       decaes 4 image.nii.gz --T2map --T2part --TE 10e-3 --T2Range 10e-3 2.0 --nT2 60
+%   Run DECAES with 4 threads on 'image.nii.gz' using command syntax:
+%     * We specify that both T2 distribution calculation and T2 parts
+%       analysis should be performed with the --T2map and --T2part flags
+%     * The echo time, T2 Range, and number of T2 bins are set using the
+%       --TE, --T2Range, and --nT2 flags
+%     * Lastly, we indicate that the regularization parameters should be
+%       saved using the --SaveRegParam flag
 % 
-%   Run DECAES as above, passing numeric values:
-%       decaes(4, 'image.nii.gz', '--T2map', '--T2part', '--TE', 10e-3, '--T2Range', [10e-3, 2.0], '--nT2', 60)
+%       decaes 4 image.nii.gz --T2map --T2part --TE 10e-3 --T2Range 10e-3 2.0 --nT2 60 --SaveRegParam
 % 
-%   Run DECAES with 4 threads using the settings file 'settings.txt':
+%   Run the same command using function syntax:
+% 
+%       decaes(4, 'image.nii.gz', '--T2map', '--T2part', '--TE', 10e-3, '--T2Range', [10e-3, 2.0], '--nT2', 60, '--SaveRegParam')
+% 
+%   Create a settings file called 'settings.txt' containing the settings
+%   from the above example (note: only one value or flag per line):
+% 
+%       image.nii.gz
+%       --T2map
+%       --T2part
+%       --TE
+%       10e-3
+%       --T2Range
+%       10e-3
+%       2.0
+%       --nT2
+%       60
+%       --SaveRegParam
+% 
+%   Run the example using the above settings file 'settings.txt':
+% 
 %       decaes 4 @settings.txt
+% 
+% DECAES was written in Julia by Jonathan Doucette (jdoucette@phas.ubc.ca).
+% Original MATLAB implementation is by Thomas Prasloski (tprasloski@gmail.com).
 
     if nargin < 2
         error('Must specify input image or settings file')
@@ -40,14 +73,17 @@ function status = decaes(nthreads, varargin)
         command = ['julia ', jl_script];
         for ii = 1:numel(varargin)
             arg = varargin{ii};
+            if islogical(arg)
+                arg = double(arg);
+            end
             if ischar(arg)
                 command = [command, ' ', arg]; %#ok
-            elseif isnumeric(arg)
+            elseif isnumeric(arg) || islogical(arg)
                 for jj = 1:numel(arg)
                     command = [command, ' ', num2str(arg(jj))]; %#ok
                 end
             else
-                error('Optional arguments must be char or numeric values/arrays');
+                error('Optional arguments must be char, logical, or numeric values, or arrays of such values');
             end
         end
 
