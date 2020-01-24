@@ -1,23 +1,25 @@
 # mwiexamples
 
-This repository contains examples demonstrating usage of the DEcomposition and Component Analysis of Exponential Signals (DECAES) tool [DECAES.jl](https://github.com/jondeuce/DECAES.jl.git),
+This repository contains examples demonstrating usage of the DEcomposition and Component Analysis of Exponential Signals ([DECAES](https://github.com/jondeuce/DECAES.jl.git)) tool,
 a *fast* implementation of the [MATLAB toolbox](https://mriresearch.med.ubc.ca/news-projects/myelin-water-fraction/) from the [UBC MRI Research Centre](https://mriresearch.med.ubc.ca/) written in the open-source [Julia programming language](https://julialang.org/).
 For an introduction to Julia, see the [Julia documentation](https://docs.julialang.org/en/v1.3/).
 
-DECAES.jl provides methods for computing voxelwise [T2-distributions](https://doi.org/10.1016/0022-2364(89)90011-5) of multi spin-echo MRI images using the extended phase graph algorithm with stimulated echo corrections.
+DECAES provides methods for computing voxelwise [T2-distributions](https://doi.org/10.1016/0022-2364(89)90011-5) of multi spin-echo MRI images using the extended phase graph algorithm with stimulated echo corrections.
 Post-processing of these T2-distributions allows for the computation of measures such as the [myelin water fraction (MWF)](https://doi.org/10.1002/mrm.1910310614) used in myelin water imaging (MWI), or the [luminal water fraction (LWF)](https://doi.org/10.1148/radiol.2017161687) used in luminal water imaging (LWI).
 
 ## Quickstart
 
-DECAES.jl provides a [command line interface (CLI)](https://jondeuce.github.io/DECAES.jl/dev/cli) for performing exponential analysis of multi spin-echo images stored as `.mat`, `.nii`, or `.nii.gz` files.
+DECAES provides a [command line interface (CLI)](https://jondeuce.github.io/DECAES.jl/dev/cli) for performing exponential analysis of multi spin-echo images stored as `.mat`, `.nii`, or `.nii.gz` files.
 
-For example, to process the file `image.nii` (command line arguments detailed below):
+* **Note:** if your data is in DICOM or PAR/REC format, the [freely available `dcm2niix` tool](https://www.nitrc.org/plugins/mwiki/index.php/dcm2nii:MainPage) is able to convert both [DICOM](https://www.nitrc.org/plugins/mwiki/index.php/dcm2nii:MainPage#General_Usage) and [PAR/REC](https://www.nitrc.org/plugins/mwiki/index.php/dcm2nii:MainPage#Philips_PAR.2FREC_Images) files into NIfTI format
+
+For example, to process the file `image.nii` (command line arguments will be detailed below):
 
 ```bash
 $ julia -e 'using DECAES; main()' image.nii <COMMAND LINE ARGS>
 ```
 
-where `using DECAES; main()` loads DECAES.jl and the CLI.
+where `using DECAES; main()` loads DECAES and the CLI.
 These commands can also be placed in a script for convenience.
 For example, using the Julia script `decaes.jl` from this respository:
 
@@ -29,7 +31,7 @@ All outputs are saved as `.mat` files.
 
 ### MATLAB Interface
 
-The DECAES.jl CLI can be called from within MATLAB using the function `decaes.m` provided by this repository.
+The DECAES CLI can be called from within MATLAB using the function `decaes.m` provided by this repository.
 The below example processes `image.nii` using 4 threads; see the `decaes.m` function documentation for details:
 
 ```MATLAB
@@ -39,8 +41,8 @@ The below example processes `image.nii` using 4 threads; see the `decaes.m` func
 
 ### Benchmarks
 
-Due to performance optimizations enabled by Julia, DECAES.jl is *fast*.
-As an illustration, here is a comparison of the T2-distribution computation times between DECAES.jl and the original MATLAB version:
+Due to performance optimizations enabled by Julia, DECAES is *fast*.
+As an illustration, here is a comparison of the T2-distribution computation times between DECAES and the original MATLAB version:
 
 <center>
 
@@ -57,11 +59,11 @@ For more benchmarks and for benchmarking details, see [DECAES.jl](https://github
 
 ### (Optional) cloning this repository
 
-Cloning this repository is not necessary to use DECAES.jl.
+Cloning this repository is not necessary to use DECAES.
 However, this repository provides the following items which may prove useful to new users of the package:
 * Example MWI data, brain masks, and a corresponding `examples.sh` script illustrating how to process the example data
-* The `decaes.jl` convenience script for calling the DECAES.jl CLI
-* The `decaes.m` MATLAB function for calling DECAES.jl from MATLAB
+* The `decaes.jl` convenience script for calling the DECAES CLI
+* The `decaes.m` MATLAB function for calling DECAES from MATLAB
 
 There are two ways to clone this repository:
 
@@ -74,16 +76,16 @@ There are two ways to clone this repository:
 
 ### Downloading Julia
 
-To use DECAES.jl, Julia version 1.3.0 or higher is required:
+To use DECAES, Julia version 1.3.0 or higher is required:
 
 1. Visit the [Julia downloads page](https://julialang.org/downloads/) and download Julia v1.3.0 or higher for your operating system.
 2. After placing the downloaded folder (named e.g. `julia-1.3.0`) in an appropriate location, add the `julia` executable (located in e.g. `julia-1.3.0/bin/julia`) to your system path
 
-Julia 1.3.0 introduced [multithreading capabilities](https://julialang.org/blog/2019/07/multithreading) - used by DECAES.jl - that greatly reduce computation time, hence the version requirement.
+Julia 1.3.0 introduced [multithreading capabilities](https://julialang.org/blog/2019/07/multithreading) - used by DECAES - that greatly reduce computation time, hence the version requirement.
 
-### Installing DECAES.jl
+### Installing DECAES
 
-There are two ways to install DECAES.jl:
+There are two ways to install DECAES:
 
 1.  Start `julia` from the command line, type `]` to enter the package manager REPL mode (the `julia>` prompt will be replaced by a `pkg>` prompt), and enter the following command:
 
@@ -94,7 +96,7 @@ There are two ways to install DECAES.jl:
     Once the package is finished installing, type the backspace key to exit the package manager REPL mode (the `julia>` prompt should reappear).
     Exit Julia using the keyboard shortcut `Ctrl+D`, or by typing `exit()`.
 
-2. Use the example script `decaes.jl` provided by this repository which will automatically install DECAES.jl (if necessary) when used with the command line interface (see below).
+2. Use the example script `decaes.jl` provided by this repository which will automatically install DECAES (if necessary) when used with the command line interface (see below).
 
 ## Command Line Interface (CLI)
 
@@ -107,8 +109,8 @@ The CLI takes as input `.nii`, `.nii.gz`, or `.mat` files and performs one or bo
 Data must be stored as (x, y, z, echo) for multi-echo input data, or (x, y, z, T2 bin) for T2-distribution input data.
 See the [documentation](https://jondeuce.github.io/DECAES.jl/dev/cli) for more API details.
 
-In order to call the command line interface one may first wish to create a Julia script which loads DECAES.jl and calls the entrypoint function `main()`.
-For example, the script `decaes.jl` provided by this repository contains a more heavily commented version of the following (plus some omitted lines which install DECAES.jl if necessary):
+In order to call the command line interface one may first wish to create a Julia script which loads DECAES and calls the entrypoint function `main()`.
+For example, the script `decaes.jl` provided by this repository contains a more heavily commented version of the following (plus some omitted lines which install DECAES if necessary):
 
 ```julia
 using DECAES # load the package
@@ -192,8 +194,8 @@ For more information on creating settings files, see the [documentation](https:/
 
 ### Example script
 
-An example `bash` script `examples.sh` is provided which executes the three example command line invocations of DECAES.jl above.
-The only requirement for this script to run is that the `julia` executable is on your system path and that DECAES.jl is installed.
+An example `bash` script `examples.sh` is provided which executes the three example command line invocations of DECAES above.
+The only requirement for this script to run is that the `julia` executable is on your system path and that DECAES is installed.
 The script can also be modified to replace `julia` with `/path/to/julia` on your system.
 
 Running the following at the terminal will execute the script:
@@ -204,11 +206,26 @@ $ ./examples.sh
 
 Results will be stored in the `output/` directory.
 
+## Updating DECAES
+
+DECAES is implemented as a Julia package, hosted at the [DECAES.jl repository](https://github.com/jondeuce/DECAES.jl.git), allowing DECAES to be updated through the Julia package manager.
+To update DECAES, start `julia` from the command line, type `]` to enter the package manager REPL mode, and enter the following:
+
+```julia
+pkg> update DECAES
+```
+
+Or equivalently, enter the following command at the terminal:
+
+```bash
+$ julia -E 'import Pkg; Pkg.update("DECAES")'
+```
+
 ## Documentation
 
 [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://jondeuce.github.io/DECAES.jl/dev)
 
-In-depth documentation for DECAES.jl can be found at the above link with information such as:
+In-depth documentation for DECAES can be found at the above link with information such as:
 * Command line interface API and examples
-* API reference detailing how to use DECAES.jl from within Julia
+* API reference detailing how to use DECAES from within Julia
 * Other internals and algorithmic details
