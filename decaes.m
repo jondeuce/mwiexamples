@@ -111,7 +111,13 @@ function jl_script = jl_temp_script
     % Create temporary helper Julia script
     jl_script = [tempname, '.jl'];
     fid = fopen(jl_script, 'w');
-    fprintf(fid, 'using DECAES\n');
+    fprintf(fid, 'import Pkg\n');
+    fprintf(fid, 'try\n');
+    fprintf(fid, '    @eval using DECAES\n');
+    fprintf(fid, 'catch e\n');
+    fprintf(fid, '    Pkg.add("DECAES")\n');
+    fprintf(fid, '    @eval using DECAES\n');
+    fprintf(fid, 'end\n');
     fprintf(fid, 'main()\n');
     fclose(fid);
 
