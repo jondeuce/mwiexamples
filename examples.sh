@@ -9,14 +9,14 @@
 export JULIA_NUM_THREADS=4
 
 # Example #1
-#   Process the image `data/images/image-175x140x1x56.nii.gz`.
+#   Process the image `data/images/image-194x110x1x56.nii.gz`.
 #   Results are stored in data/output/example1/
 echo; echo; echo '-------- EXAMPLE #1 --------'; echo; echo
 julia decaes.jl @data/example1.txt
 
 # Example #2
-#   Process the image `data/images/image-175x140x8x56.nii.gz` using the
-#   corresponding mask file `data/masks/image-175x140x8x56_mask.nii.gz`.
+#   Process the image `data/images/image-194x110x8x56.nii.gz` using the
+#   corresponding mask file `data/masks/image-194x110x8x56_mask.nii.gz`.
 #   Results are stored in data/output/example2/
 echo; echo; echo '-------- EXAMPLE #2 --------'; echo; echo
 julia decaes.jl @data/example2.txt

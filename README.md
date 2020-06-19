@@ -9,19 +9,23 @@ Post-processing of these T2-distributions allows for the computation of measures
 
 ## Quickstart
 
-DECAES provides a [command line interface (CLI)](https://jondeuce.github.io/DECAES.jl/dev/cli) for performing exponential analysis of multi spin-echo images stored as `.mat`, `.nii`, or `.nii.gz` files.
+### Command Line Interface
 
-* **Note:** if your data is in DICOM or PAR/REC format, the [freely available `dcm2niix` tool](https://www.nitrc.org/plugins/mwiki/index.php/dcm2nii:MainPage) is able to convert both [DICOM](https://www.nitrc.org/plugins/mwiki/index.php/dcm2nii:MainPage#General_Usage) and [PAR/REC](https://www.nitrc.org/plugins/mwiki/index.php/dcm2nii:MainPage#Philips_PAR.2FREC_Images) files into NIfTI format
+DECAES provides a [command line interface (CLI)](https://jondeuce.github.io/DECAES.jl/dev/cli) for performing exponential analysis of multi spin-echo images.
+Input image files must be stored as NIfTI files (extension `.nii` or `.nii.gz`), MATLAB files (extension `.mat`), Philips PAR/REC file pairs (extensions `.par`/`.rec` or `.PAR`/`.REC`), or Philips XML/REC file pairs (extensions `.xml`/`.rec` or `.XML`/`.REC`).
+If your data is in DICOM format, the [freely available `dcm2niix` tool](https://www.nitrc.org/plugins/mwiki/index.php/dcm2nii:MainPage) is able to convert both [DICOM](https://www.nitrc.org/plugins/mwiki/index.php/dcm2nii:MainPage#General_Usage) files into NIfTI format.
 
-For example, to process the file `image.nii` (command line arguments will be detailed below):
+The interface for processing an image file is as follows:
 
 ```bash
 $ julia -e 'using DECAES; main()' image.nii <COMMAND LINE ARGS>
 ```
 
-where `using DECAES; main()` loads DECAES and the CLI.
-These commands can also be placed in a script for convenience.
-For example, using the Julia script `decaes.jl` from this respository:
+where `image.nii` is the image file to be processed, and `using DECAES; main()` loads DECAES and the CLI.
+Command line arguments are introduced below, and detailed in the [documentation](https://jondeuce.github.io/DECAES.jl/dev/cli).
+
+Alternatively, a Julia script `decaes.jl` is provided by this respository for convenience.
+This script will load DECAES (installing it if necessary) and the CLI for you, and can be used as:
 
 ```bash
 $ julia decaes.jl image.nii <COMMAND LINE ARGS>
@@ -48,8 +52,8 @@ As an illustration, here is a comparison of the T2-distribution computation time
 
 | Dataset      | Image Size           | MATLAB      | Julia      |
 | :---:        | :---:                | :---:       | :---:      |
-| 48-echo CPMG | 240 x 240 x 48 x 48  | 1h:29m:35s  | **1m:50s** |
-| 56-echo CPMG | 240 x 240 x 113 x 48 | 2h:25m:19s  | **3m:19s** |
+| 48-echo CPMG | 240 x 240 x 48 x 48  | 1h:29m:35s  | **1m:24s** |
+| 56-echo CPMG | 240 x 240 x 113 x 48 | 2h:25m:19s  | **2m:20s** |
 
 </center>
 
@@ -62,8 +66,8 @@ For more benchmarks and for benchmarking details, see [DECAES.jl](https://github
 Cloning this repository is not necessary to use DECAES.
 However, this repository provides the following items which may prove useful to new users of the package:
 * Example MWI data, brain masks, and a corresponding `examples.sh` script illustrating how to process the example data
-* The `decaes.jl` convenience script for calling the DECAES CLI
-* The `decaes.m` MATLAB function for calling DECAES from MATLAB
+* The `decaes.jl` convenience script for installing DECAES and calling the DECAES CLI
+* The `decaes.m` MATLAB function for installing DECAES and calling DECAES from MATLAB
 
 There are two ways to clone this repository:
 
@@ -78,7 +82,7 @@ There are two ways to clone this repository:
 
 To use DECAES, Julia version 1.3.0 or higher is required:
 
-1. Visit the [Julia downloads page](https://julialang.org/downloads/) and download Julia v1.3.0 or higher for your operating system.
+1. Visit the [Julia downloads page](https://julialang.org/downloads/) and download Julia v1.3.0 or higher for your operating system (use the most up-to-date stable release of Julia for best performance)
 2. After placing the downloaded folder (named e.g. `julia-1.3.0`) in an appropriate location, add the `julia` executable (located in e.g. `julia-1.3.0/bin/julia`) to your system path
 
 Julia 1.3.0 introduced [multithreading capabilities](https://julialang.org/blog/2019/07/multithreading) - used by DECAES - that greatly reduce computation time, hence the version requirement.
@@ -87,7 +91,9 @@ Julia 1.3.0 introduced [multithreading capabilities](https://julialang.org/blog/
 
 There are two ways to install DECAES:
 
-1.  Start `julia` from the command line, type `]` to enter the package manager REPL mode (the `julia>` prompt will be replaced by a `pkg>` prompt), and enter the following command:
+1. Use the example script `decaes.jl` or MATLAB function `decaes.m` provided by this repository; DECAES will automatically be installed (if necessary) when used through these interfaces
+
+2.  Start `julia` from the command line, type `]` to enter the package manager REPL mode (the `julia>` prompt will be replaced by a `pkg>` prompt), and enter the following command:
 
     ```julia
     pkg> add DECAES
@@ -96,39 +102,31 @@ There are two ways to install DECAES:
     Once the package is finished installing, type the backspace key to exit the package manager REPL mode (the `julia>` prompt should reappear).
     Exit Julia using the keyboard shortcut `Ctrl+D`, or by typing `exit()`.
 
-2. Use the example script `decaes.jl` provided by this repository which will automatically install DECAES (if necessary) when used with the command line interface (see below).
+**NOTE**: Julia is a ["just-ahead-of-time" compiled language](https://www.youtube.com/watch?v=7KGZ_9D_DbI), residing in between ahead-of-time (AOT) and just-in-time (JIT) compiled languages.
+Because of this, the first time DECAES is installed and run there will be several minutes of installation and compilation delay before processing starts.
+Subsequent runs will be much faster; approximately 10 seconds is needed to start Julia and load DECAES before processing.
 
 ## Command Line Interface (CLI)
 
-This toolbox provides a command line interface (CLI) for performing multi-exponential analysis from the terminal.
-The CLI aims to give users the ability to compute e.g. myelin water fraction maps from the command line and afterwards continue using the programming language of their choice.
+The DECAES CLI aims to give users the ability to compute e.g. myelin water fraction maps from the command line and afterwards continue using the programming language of their choice.
 As such, using the CLI does not require any knowledge of Julia, only the installation steps above need to be completed.
-In fact, as mentioned in the [Quickstart](@ref) section, one may call the CLI directly from within MATLAB using the `decaes.m` file provided by this repository.
+Indeed, as mentioned in the [Quickstart](@ref) section, one may call the CLI directly from within MATLAB using the `decaes.m` file provided by this repository.
 
-The CLI takes as input `.nii`, `.nii.gz`, or `.mat` files and performs one or both of T2-distribution computation and T2-parts analysis, the latter of which performs post-processing of the T2-distribution to calculate parameters such as the myelin water fraction.
+DECAES takes images stored as NIfTI, MATLAB, PAR/REC, or XML/REC files as input and performs one or both of T2-distribution computation and T2-parts analysis, the latter of which performs post-processing of the T2-distribution to calculate parameters such as the myelin water fraction.
 Data must be stored as (x, y, z, echo) for multi-echo input data, or (x, y, z, T2 bin) for T2-distribution input data.
 See the [documentation](https://jondeuce.github.io/DECAES.jl/dev/cli) for more API details.
-
-In order to call the command line interface one may first wish to create a Julia script which loads DECAES and calls the entrypoint function `main()`.
-For example, the script `decaes.jl` provided by this repository contains a more heavily commented version of the following (plus some omitted lines which install DECAES if necessary):
-
-```julia
-using DECAES # load the package
-main() # call command line interface
-```
-
-## Examples
 
 The following examples can be run from within the `mwiexamples` folder.
 
 ### Basic usage
 
-The most straightforward usage is to call `julia` on a script such as `decaes.jl`, described above, and pass in the input image filename and command line flags directly:
+The most straightforward usage is to call `julia` on the `decaes.jl` script provided by this repository, passing the input image filename and analysis settings as command line arguments:
 
 ```bash
 $ export JULIA_NUM_THREADS=4
-$ julia decaes.jl data/images/image-175x140x1x56.nii.gz \
-  --T2map --T2part --TE 0.007 \
+$ julia decaes.jl data/images/image-194x110x1x56.nii.gz \
+  --T2map --T2part --TE 7e-3 \
+  --T2Range 10e-3 2.0 --SPWin 10e-3 40e-3 --MPWin 40e-3 200e-3 \
   --output output/basic/
 ```
 
@@ -137,24 +135,26 @@ On Windows systems, the keyword `set` should be used instead of `export`; see th
 
 The second line calls `julia` on `decaes.jl` as follows:
 
-* The 4D image file `data/images/image-175x140x1x56.nii.gz` is passed as the first argument
+* The 4D image file `data/images/image-194x110x1x56.nii.gz` is passed as the first argument
 * The flags `--T2map` and `--T2part` are passed, indicating that both T2-distribution computation and T2-parts analysis (to compute e.g. the myelin water fraction) should be performed
-* The flag `--TE` is passed with argument `0.007`, setting the echo times to 7 ms, 14 ms, ...
+* The flag `--TE` is passed with argument `7e-3`, setting the echo times to 7 ms, 14 ms, ...
+* The flag `--T2Range` is passed with argument `10e-3 2.0` to set the range of T2 values for the T2-distribution; the `--SPWin` and `--MPWin` flags similarly set the short peak and middle peak windows
 * The flag `--output` is passed with argument `output/basic/`.
-The folder `output/basic/` will be created if it does not already exist, and the T2-distribution and T2-parts results will be stored there.
+The folder `output/basic/` will be created if it does not already exist, and the T2-distribution and T2-parts results will be stored there as `.mat` files.
 
 See the [arguments](https://jondeuce.github.io/DECAES.jl/dev/cli/#Arguments-1) section of the documentation for more information on command line arguments.
 
 ### Passing image masks
 
 Image masks can be passed in for processing.
-We can process the image file `data/images/image-175x140x8x56.nii.gz` using the brain mask `data/masks/image-175x140x8x56_mask.nii.gz` as follows:
+We can process the image file `data/images/image-194x110x8x56.nii.gz` using the brain mask `data/masks/image-194x110x8x56_mask.nii.gz` as follows:
 
 ```bash
 $ export JULIA_NUM_THREADS=4
-$ julia decaes.jl data/images/image-175x140x8x56.nii.gz \
-  --T2map --T2part --TE 0.007 \
-  --mask data/masks/image-175x140x8x56_mask.nii.gz \
+$ julia decaes.jl data/images/image-194x110x8x56.nii.gz \
+  --T2map --T2part --TE 7e-3 \
+  --T2Range 10e-3 2.0 --SPWin 10e-3 40e-3 --MPWin 40e-3 200e-3 \
+  --mask data/masks/image-194x110x8x56_mask.nii.gz \
   --output output/masked/
 ```
 
@@ -167,11 +167,14 @@ Here, we process both images from the above examples, this time using brain mask
 
 ```bash
 $ export JULIA_NUM_THREADS=4
-$ julia decaes.jl data/images/image-175x140x1x56.nii.gz \
-  data/images/image-175x140x8x56.nii.gz \
-  --T2map --T2part --TE 0.007 \
-  --mask data/masks/image-175x140x1x56_mask.nii.gz \
-  data/masks/image-175x140x8x56_mask.nii.gz \
+$ julia decaes.jl \
+  data/images/image-194x110x1x56.nii.gz \
+  data/images/image-194x110x8x56.nii.gz \
+  --T2map --T2part --TE 7e-3 \
+  --T2Range 10e-3 2.0 --SPWin 10e-3 40e-3 --MPWin 40e-3 200e-3 \
+  --mask \
+  data/masks/image-194x110x1x56_mask.nii.gz \
+  data/masks/image-194x110x8x56_mask.nii.gz \
   --output output/multiple/
 ```
 
@@ -229,3 +232,24 @@ In-depth documentation for DECAES can be found at the above link with informatio
 * Command line interface API and examples
 * API reference detailing how to use DECAES from within Julia
 * Other internals and algorithmic details
+
+## Citing this work
+
+[![Z Med Phys](https://cdn.ncbi.nlm.nih.gov/corehtml/query/egifs/https:--linkinghub.elsevier.com-ihub-images-PubMedLink.gif)](https://doi.org/10.1016/j.zemedi.2020.04.001)
+
+If you use DECAES in your research, please cite the following:
+
+```tex
+@article{DECAES.jl-2020,
+  title = {{{DECAES}} - {{DEcomposition}} and {{Component Analysis}} of {{Exponential Signals}}},
+  author = {Doucette, Jonathan and Kames, Christian and Rauscher, Alexander},
+  year = {2020},
+  month = may,
+  issn = {1876-4436},
+  doi = {10.1016/j.zemedi.2020.04.001},
+  journal = {Zeitschrift Fur Medizinische Physik},
+  keywords = {Brain,Luminal Water Imaging,MRI,Myelin Water Imaging,Prostate},
+  language = {eng},
+  pmid = {32451148}
+}
+```
