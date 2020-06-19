@@ -34,20 +34,24 @@ If your data is in DICOM format, the [freely available `dcm2niix` tool](https://
 The interface for processing an image file is as follows:
 
 ```bash
+$ export JULIA_NUM_THREADS=4
 $ julia -e 'using DECAES; main()' image.nii <COMMAND LINE ARGS>
 ```
 
-where `image.nii` is the image file to be processed, and `using DECAES; main()` loads DECAES and the CLI.
-Command line arguments are introduced below, and detailed in the [documentation](https://jondeuce.github.io/DECAES.jl/dev/cli).
+The environment variable `JULIA_NUM_THREADS` enables multithreading within Julia (4 threads in this example).
+On Windows systems, the keyword `set` should be used instead of `export`; see the [Julia documentation](https://docs.julialang.org/en/v1/manual/parallel-computing/#Setup-1).
+The file `image.nii` is the image to be processed, and `using DECAES; main()` loads DECAES and the CLI.
+Command line arguments are [introduced below](#command-line-interface), and detailed in the [documentation](https://jondeuce.github.io/DECAES.jl/dev/cli).
 
 Alternatively, a Julia script `decaes.jl` is provided by this respository for convenience.
 This script will load DECAES (installing it if necessary) and the CLI for you, and can be used as:
 
 ```bash
+$ export JULIA_NUM_THREADS=4
 $ julia decaes.jl image.nii <COMMAND LINE ARGS>
 ```
 
-All outputs are saved as `.mat` files.
+All outputs are saved as `.mat` files; see the [documentation](https://jondeuce.github.io/DECAES.jl/dev/cli/#Outputs-1) for more information.
 
 ### MATLAB Interface
 
@@ -55,9 +59,11 @@ The DECAES CLI can be called from within MATLAB using the function `decaes.m` pr
 The below example processes `image.nii` using 4 threads; see the `decaes.m` function documentation for details:
 
 ```MATLAB
-> decaes(4, 'image.nii', <COMMAND LINE ARGS>...) % function syntax
-> decaes 4 image.nii <COMMAND LINE ARGS> % or equivalently, command syntax
+>> decaes(4, 'image.nii', <COMMAND LINE ARGS>...) % function syntax
+>> decaes 4 image.nii <COMMAND LINE ARGS> % or equivalently, command syntax
 ```
+
+**NOTE**: The examples in this README using the CLI are easily translated to MATLAB: simply replace command line statements such as `export JULIA_NUM_THREADS=4; julia decaes.jl ...` with equivalent MATLAB commands `decaes 4 image ...`
 
 ## Installation
 
@@ -129,11 +135,6 @@ $ julia decaes.jl data/images/image-194x110x1x56.nii.gz \
   --T2Range 10e-3 2.0 --SPWin 10e-3 40e-3 --MPWin 40e-3 200e-3 \
   --output output/basic/
 ```
-
-The first line sets the environment variable `JULIA_NUM_THREADS` to enable multithreading within Julia (4 threads in this example).
-On Windows systems, the keyword `set` should be used instead of `export`; see the [Julia documentation](https://docs.julialang.org/en/v1/manual/parallel-computing/#Setup-1).
-
-The second line calls `julia` on `decaes.jl` as follows:
 
 * The 4D image file `data/images/image-194x110x1x56.nii.gz` is passed as the first argument
 * The flags `--T2map` and `--T2part` are passed, indicating that both T2-distribution computation and T2-parts analysis (to compute e.g. the myelin water fraction) should be performed
