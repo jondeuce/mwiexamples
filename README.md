@@ -7,6 +7,22 @@ For an introduction to Julia, see the [Julia documentation](https://docs.juliala
 DECAES provides methods for computing voxelwise [T2-distributions](https://doi.org/10.1016/0022-2364(89)90011-5) of multi spin-echo MRI images using the extended phase graph algorithm with stimulated echo corrections.
 Post-processing of these T2-distributions allows for the computation of measures such as the [myelin water fraction (MWF)](https://doi.org/10.1002/mrm.1910310614) used in myelin water imaging (MWI), or the [luminal water fraction (LWF)](https://doi.org/10.1148/radiol.2017161687) used in luminal water imaging (LWI).
 
+### Benchmarks
+
+Due to performance optimizations enabled by Julia, DECAES is *fast*.
+As an illustration, here is a comparison of the T2-distribution computation times between DECAES and the original MATLAB version:
+
+<center>
+
+| Dataset      | Image Size           | MATLAB      | Julia      |
+| :---:        | :---:                | :---:       | :---:      |
+| 48-echo CPMG | 240 x 240 x 48 x 48  | 1h:29m:35s  | **1m:24s** |
+| 56-echo CPMG | 240 x 240 x 113 x 48 | 2h:25m:19s  | **2m:20s** |
+
+</center>
+
+For more benchmarks and for benchmarking details, see [DECAES.jl](https://github.com/jondeuce/DECAES.jl#benchmarks).
+
 ## Quickstart
 
 ### Command Line Interface
@@ -42,22 +58,6 @@ The below example processes `image.nii` using 4 threads; see the `decaes.m` func
 > decaes(4, 'image.nii', <COMMAND LINE ARGS>...) % function syntax
 > decaes 4 image.nii <COMMAND LINE ARGS> % or equivalently, command syntax
 ```
-
-### Benchmarks
-
-Due to performance optimizations enabled by Julia, DECAES is *fast*.
-As an illustration, here is a comparison of the T2-distribution computation times between DECAES and the original MATLAB version:
-
-<center>
-
-| Dataset      | Image Size           | MATLAB      | Julia      |
-| :---:        | :---:                | :---:       | :---:      |
-| 48-echo CPMG | 240 x 240 x 48 x 48  | 1h:29m:35s  | **1m:24s** |
-| 56-echo CPMG | 240 x 240 x 113 x 48 | 2h:25m:19s  | **2m:20s** |
-
-</center>
-
-For more benchmarks and for benchmarking details, see [DECAES.jl](https://github.com/jondeuce/DECAES.jl#benchmarks).
 
 ## Installation
 
