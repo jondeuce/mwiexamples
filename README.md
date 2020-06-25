@@ -17,7 +17,7 @@ As an illustration, here is a comparison of the T2-distribution computation time
 | Dataset      | Image Size           | MATLAB      | Julia      |
 | :---:        | :---:                | :---:       | :---:      |
 | 48-echo CPMG | 240 x 240 x 48 x 48  | 1h:29m:35s  | **1m:24s** |
-| 56-echo CPMG | 240 x 240 x 113 x 48 | 2h:25m:19s  | **2m:20s** |
+| 56-echo CPMG | 240 x 240 x 113 x 56 | 2h:25m:19s  | **2m:20s** |
 
 </center>
 
