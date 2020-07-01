@@ -1,6 +1,6 @@
 # mwiexamples
 
-This repository contains examples demonstrating usage of the DEcomposition and Component Analysis of Exponential Signals ([DECAES](https://github.com/jondeuce/DECAES.jl.git)) tool,
+This repository contains examples demonstrating usage of the DEcomposition and Component Analysis of Exponential Signals ([DECAES](https://bit.ly/DECAES)) tool,
 a *fast* implementation of the [MATLAB toolbox](https://mriresearch.med.ubc.ca/news-projects/myelin-water-fraction/) from the [UBC MRI Research Centre](https://mriresearch.med.ubc.ca/) written in the open-source [Julia programming language](https://julialang.org/).
 For an introduction to Julia, see the [Julia documentation](https://docs.julialang.org/en/v1.3/).
 
@@ -131,12 +131,12 @@ We have chosen to make the most important parameters required arguments.
 They should be carefully chosen, and most importantly, used consistently when comparing results.
 
 * The matrix size and number of echoes `MatrixSize` and `nTE`; these are inferred from the size of the input image
-* The echo time `TE` (units: seconds); this is determined from scanning parameters
+* The echo time `TE` (units: seconds). Must correspond to scanning protocol
 * The number of T2 bins `nT2`. Typically, `nT2 = 40` will be a good default, but note that increasing `nT2` or otherwise decreasing the spacing between T2 values (such as by decreasing the width of `T2Range`) may require more regularization
 * The range of T2 values `T2Range` (units: seconds). The lower bound should be on the order of `TE`, as T2 components much smaller than `TE` are not well captured by the CPMG signal. Similarly, the upper bound of the `T2Range` typically should not be much higher than a small multiple of the last sampled echo time `nTE * TE`, as arbitrarily high T2 values cannot be recovered
 * The small and middle peak windows `SPWin` and `MPWin` (units: seconds):
-    * For myelin water imaging, the myelin vs. intra/extra-cellular water cutoff should be chosen based on the T2 distribution. For example, plotting the mean T2 distribution over white matter voxels should reveal two distinct peaks from which a cutoff value can be chosen. Typical values may be `SPWin = [TE, 25e-3]` and `MPWin = [25e-3, 200e-3]`, where `SPWin` controls the myelin water window.
-    * Similar methods should be used for luminal water imaging. In LWI, `MPWin` controls the luminal water window. Typical values may be `SPWin = [TE, 200e-3]` and `MPWin = [200e-3, T2Range(2)]`, where `T2Range(2)` is the upper bound of `T2Range`.
+    * For myelin water imaging, the myelin vs. intra/extra-cellular water cutoff should be chosen based on the T2 distribution. For example, plotting the mean T2 distribution over white matter voxels should reveal two distinct peaks from which a cutoff value can be chosen. Typical values may be `SPWin = [TE, 25e-3]` and `MPWin = [25e-3, 200e-3]`, where `SPWin` controls the myelin water window
+    * Similar methods should be used for luminal water imaging. In LWI, `MPWin` controls the luminal water window. Typical values may be `SPWin = [TE, 200e-3]` and `MPWin = [200e-3, T2Range(2)]`, where `T2Range(2)` is the upper bound of `T2Range`
 
 ### Basic usage
 
