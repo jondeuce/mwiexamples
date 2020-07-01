@@ -5,12 +5,14 @@
 --T2part
 --TE
 7e-3
+--nT2
+40
 --T2Range
 10e-3
 2.0
 --SPWin
 10e-3
-40e-3
+25e-3
 --MPWin
-40e-3
+25e-3
 200e-3

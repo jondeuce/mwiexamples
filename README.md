@@ -122,7 +122,21 @@ DECAES takes images stored as NIfTI, MATLAB, PAR/REC, or XML/REC files as input 
 Data must be stored as (x, y, z, echo) for multi-echo input data, or (x, y, z, T2 bin) for T2-distribution input data.
 See the [documentation](https://jondeuce.github.io/DECAES.jl/dev/cli) for more API details.
 
-The following examples can be run from within the `mwiexamples` folder.
+The examples to follow should be run from within the `mwiexamples` folder.
+
+### Required parameters
+
+Several parameters are required to perform myelin or luminal water imaging.
+We have chosen to make the most important parameters required arguments.
+They should be carefully chosen, and most importantly, used consistently when comparing results.
+
+* The matrix size and number of echoes `MatrixSize` and `nTE`; these are inferred from the size of the input image
+* The echo time `TE` (units: seconds); this is determined from scanning parameters
+* The number of T2 bins `nT2`. Typically, `nT2 = 40` will be a good default, but note that increasing `nT2` or otherwise decreasing the spacing between T2 values (such as by decreasing the width of `T2Range`) may require more regularization
+* The range of T2 values `T2Range` (units: seconds). The lower bound should be on the order of `TE`, as T2 components much smaller than `TE` are not well captured by the CPMG signal. Similarly, the upper bound of the `T2Range` typically should not be much higher than a small multiple of the last sampled echo time `nTE * TE`, as arbitrarily high T2 values cannot be recovered
+* The small and middle peak windows `SPWin` and `MPWin` (units: seconds):
+    * For myelin water imaging, the myelin vs. intra/extra-cellular water cutoff should be chosen based on the T2 distribution. For example, plotting the mean T2 distribution over white matter voxels should reveal two distinct peaks from which a cutoff value can be chosen. Typical values may be `SPWin = [TE, 25e-3]` and `MPWin = [25e-3, 200e-3]`, where `SPWin` controls the myelin water window.
+    * Similar methods should be used for luminal water imaging. In LWI, `MPWin` controls the luminal water window. Typical values may be `SPWin = [TE, 200e-3]` and `MPWin = [200e-3, T2Range(2)]`, where `T2Range(2)` is the upper bound of `T2Range`.
 
 ### Basic usage
 
@@ -131,14 +145,15 @@ The most straightforward usage is to call `julia` on the `decaes.jl` script prov
 ```bash
 $ export JULIA_NUM_THREADS=4
 $ julia decaes.jl data/images/image-194x110x1x56.nii.gz \
-  --T2map --T2part --TE 7e-3 \
-  --T2Range 10e-3 2.0 --SPWin 10e-3 40e-3 --MPWin 40e-3 200e-3 \
+  --T2map --T2part --TE 7e-3 --nT2 40 \
+  --T2Range 10e-3 2.0 --SPWin 10e-3 25e-3 --MPWin 25e-3 200e-3 \
   --output output/basic/
 ```
 
 * The 4D image file `data/images/image-194x110x1x56.nii.gz` is passed as the first argument
 * The flags `--T2map` and `--T2part` are passed, indicating that both T2-distribution computation and T2-parts analysis (to compute e.g. the myelin water fraction) should be performed
 * The flag `--TE` is passed with argument `7e-3`, setting the echo times to 7 ms, 14 ms, ...
+* The flag `--nT2` is passed with argument `40`, setting the number of T2 components to 40
 * The flag `--T2Range` is passed with argument `10e-3 2.0` to set the range of T2 values for the T2-distribution; the `--SPWin` and `--MPWin` flags similarly set the short peak and middle peak windows
 * The flag `--output` is passed with argument `output/basic/`.
 The folder `output/basic/` will be created if it does not already exist, and the T2-distribution and T2-parts results will be stored there as `.mat` files.
@@ -153,8 +168,8 @@ We can process the image file `data/images/image-194x110x8x56.nii.gz` using the 
 ```bash
 $ export JULIA_NUM_THREADS=4
 $ julia decaes.jl data/images/image-194x110x8x56.nii.gz \
-  --T2map --T2part --TE 7e-3 \
-  --T2Range 10e-3 2.0 --SPWin 10e-3 40e-3 --MPWin 40e-3 200e-3 \
+  --T2map --T2part --TE 7e-3 --nT2 40 \
+  --T2Range 10e-3 2.0 --SPWin 10e-3 25e-3 --MPWin 25e-3 200e-3 \
   --mask data/masks/image-194x110x8x56_mask.nii.gz \
   --output output/masked/
 ```
@@ -171,8 +186,8 @@ $ export JULIA_NUM_THREADS=4
 $ julia decaes.jl \
   data/images/image-194x110x1x56.nii.gz \
   data/images/image-194x110x8x56.nii.gz \
-  --T2map --T2part --TE 7e-3 \
-  --T2Range 10e-3 2.0 --SPWin 10e-3 40e-3 --MPWin 40e-3 200e-3 \
+  --T2map --T2part --TE 7e-3 --nT2 40 \
+  --T2Range 10e-3 2.0 --SPWin 10e-3 25e-3 --MPWin 25e-3 200e-3 \
   --mask \
   data/masks/image-194x110x1x56_mask.nii.gz \
   data/masks/image-194x110x8x56_mask.nii.gz \
@@ -196,19 +211,14 @@ These results will be stored in the folders `output/example1/`, `output/example2
 The use of settings files is highly recommended for reproducibility and self-documentation, as a copy of the input settings file will be automatically saved in the output folder.
 For more information on creating settings files, see the [documentation](https://jondeuce.github.io/DECAES.jl/dev/cli/#Settings-files-1).
 
-### Example script
+### Example scripts
 
-An example `bash` script `examples.sh` is provided which executes the three example command line invocations of DECAES above.
-The only requirement for this script to run is that the `julia` executable is on your system path and that DECAES is installed.
-The script can also be modified to replace `julia` with `/path/to/julia` on your system.
+The scripts `examples.sh` and `examples.m` provided by this repository demonstrate the three example invocations of DECAES above.
+The only requirement for these scripts to run is that the `julia` executable is on your system path and that DECAES is installed.
+The scripts can also be easily modified to replace `julia` with `/path/to/julia` on your system, if necessary.
 
-Running the following at the terminal will execute the script:
-
-```bash
-$ ./examples.sh
-```
-
-Results will be stored in the `output/` directory.
+Running `./examples.sh` in the terminal or `examples` in MATLAB will execute the respective scripts.
+Results will be stored in a directory `output/`.
 
 ## Updating DECAES
 

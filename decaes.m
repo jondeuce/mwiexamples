@@ -34,16 +34,17 @@ function status = decaes(nthreads, varargin)
 %       note that the mask file type need not match the image file type
 %     * We specify that both T2 distribution calculation and T2 parts
 %       analysis should be performed with the --T2map and --T2part flags
-%     * The echo time, T2 Range, and number of T2 bins are set using the
-%       --TE, --T2Range, and --nT2 flags
+%     * The required arguments echo time, number of T2 bins, T2 Range,
+%       small peak window, and middle peak window are set using the --TE,
+%       --nT2, --T2Range, --SPWin, and --MPWin flags, respectively
 %     * Lastly, we indicate that the regularization parameters should be
 %       saved using the --SaveRegParam flag
 % 
-%       decaes 4 image.nii.gz --output results --mask image_mask.mat --T2map --T2part --TE 7e-3 --T2Range 10e-3 2.0 --nT2 60 --SaveRegParam
+%       decaes 4 image.nii.gz --output results --mask image_mask.mat --T2map --T2part --TE 7e-3 --nT2 60 --T2Range 10e-3 2.0 --SPWin 10e-3 25e-3 --MPWin 25e-3 200.0e-3 --SaveRegParam
 % 
 %   Run the same command using function syntax:
 % 
-%       decaes(4, 'image.nii.gz', '--output', 'results', '--mask', 'image_mask.mat', '--T2map', '--T2part', '--TE', 7e-3, '--T2Range', [10e-3, 2.0], '--nT2', 60, '--SaveRegParam')
+%       decaes(4, 'image.nii.gz', '--output', 'results', '--mask', 'image_mask.mat', '--T2map', '--T2part', '--TE', 7e-3, '--nT2', 60, '--T2Range', [10e-3, 2.0], '--SPWin', [10e-3, 25e-3], '--MPWin', [25e-3, 200.0e-3], '--SaveRegParam')
 % 
 %   Create a settings file called 'settings.txt' containing the settings
 %   from the above example (note: only one value or flag per line):
@@ -57,11 +58,17 @@ function status = decaes(nthreads, varargin)
 %       --T2part
 %       --TE
 %       7e-3
+%       --nT2
+%       60
 %       --T2Range
 %       10e-3
 %       2.0
-%       --nT2
-%       60
+%       --SPWin
+%       10e-3
+%       25e-3
+%       --MPWin
+%       25e-3
+%       200.0e-3
 %       --SaveRegParam
 % 
 %   Run the example using the above settings file 'settings.txt':
