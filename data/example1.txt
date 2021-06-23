@@ -16,3 +16,5 @@
 --MPWin
 25e-3
 200e-3
+--Reg
+lcurve

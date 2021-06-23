@@ -20,3 +20,7 @@
 --MPWin
 25e-3
 200e-3
+--Reg
+chi2
+--Chi2Factor
+1.02
