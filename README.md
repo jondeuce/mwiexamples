@@ -116,6 +116,21 @@ There are two ways to install DECAES:
 Because of this, the first time DECAES is installed and run there may be several minutes of installation and compilation delay before processing starts.
 Subsequent runs will be much faster; typically, 5-10 seconds are needed to start Julia and load DECAES before processing begins.
 
+### Updating DECAES
+
+DECAES is implemented as a Julia package, hosted at the [DECAES.jl repository](https://github.com/jondeuce/DECAES.jl.git), allowing DECAES to be updated through the Julia package manager.
+To update DECAES, start `julia` from the command line, type `]` to enter the package manager REPL mode, and enter the following:
+
+```julia
+pkg> update DECAES
+```
+
+Or equivalently, enter the following command at the terminal:
+
+```bash
+$ julia -e 'import Pkg; Pkg.update("DECAES")'
+```
+
 ## Command Line Interface (CLI)
 
 The DECAES CLI aims to give users the ability to compute e.g. myelin water fraction maps from the command line and afterwards continue using the programming language of their choice.
@@ -224,21 +239,6 @@ The scripts can also be easily modified to replace `julia` with `/path/to/julia`
 
 Running `./examples.sh` in the terminal or `examples` in MATLAB will execute the respective scripts.
 Results will be stored in a directory `output/`.
-
-## Updating DECAES
-
-DECAES is implemented as a Julia package, hosted at the [DECAES.jl repository](https://github.com/jondeuce/DECAES.jl.git), allowing DECAES to be updated through the Julia package manager.
-To update DECAES, start `julia` from the command line, type `]` to enter the package manager REPL mode, and enter the following:
-
-```julia
-pkg> update DECAES
-```
-
-Or equivalently, enter the following command at the terminal:
-
-```bash
-$ julia -e 'import Pkg; Pkg.update("DECAES")'
-```
 
 ## Citing this work
 
