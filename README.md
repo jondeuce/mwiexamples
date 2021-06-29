@@ -7,6 +7,34 @@ For an introduction to Julia, see the [Julia documentation](https://docs.juliala
 DECAES provides methods for computing voxelwise [T2-distributions](https://doi.org/10.1016/0022-2364(89)90011-5) of multi spin-echo MRI images using the extended phase graph algorithm with stimulated echo corrections.
 Post-processing of these T2-distributions allows for the computation of measures such as the [myelin water fraction (MWF)](https://doi.org/10.1002/mrm.1910310614) used in myelin water imaging (MWI), or the [luminal water fraction (LWF)](https://doi.org/10.1148/radiol.2017161687) used in luminal water imaging (LWI).
 
+### Documentation
+
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://jondeuce.github.io/DECAES.jl/dev)
+
+In-depth documentation for DECAES can be found at the above link with information such as:
+* Command line interface API details
+* Julia API reference for using DECAES from within Julia
+* DECAES internals and algorithmic details
+
+If you use DECAES in your research, please cite the following:
+
+[![Z Med Phys](https://cdn.ncbi.nlm.nih.gov/corehtml/query/egifs/https:--linkinghub.elsevier.com-ihub-images-PubMedLink.gif)](https://doi.org/10.1016/j.zemedi.2020.04.001)
+
+```tex
+@article{DECAES.jl-2020,
+  title = {{{DECAES}} - {{DEcomposition}} and {{Component Analysis}} of {{Exponential Signals}}},
+  author = {Doucette, Jonathan and Kames, Christian and Rauscher, Alexander},
+  year = {2020},
+  month = may,
+  issn = {1876-4436},
+  doi = {10.1016/j.zemedi.2020.04.001},
+  journal = {Zeitschrift Fur Medizinische Physik},
+  keywords = {Brain,Luminal Water Imaging,MRI,Myelin Water Imaging,Prostate},
+  language = {eng},
+  pmid = {32451148}
+}
+```
+
 ### Benchmarks
 
 Due to performance optimizations enabled by Julia, DECAES is *fast*.
@@ -22,15 +50,6 @@ As an illustration, here is a comparison of the T2-distribution computation time
 </center>
 
 For more benchmarks and for benchmarking details, see [DECAES.jl](https://github.com/jondeuce/DECAES.jl#benchmarks).
-
-## Documentation
-
-[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://jondeuce.github.io/DECAES.jl/dev)
-
-In-depth documentation for DECAES can be found at the above link with information such as:
-* Command line interface API details
-* Julia API reference for using DECAES from within Julia
-* DECAES internals and algorithmic details
 
 ## Quickstart
 
@@ -239,24 +258,3 @@ The scripts can also be easily modified to replace `julia` with `/path/to/julia`
 
 Running `./examples.sh` in the terminal or `examples` in MATLAB will execute the respective scripts.
 Results will be stored in a directory `output/`.
-
-## Citing this work
-
-[![Z Med Phys](https://cdn.ncbi.nlm.nih.gov/corehtml/query/egifs/https:--linkinghub.elsevier.com-ihub-images-PubMedLink.gif)](https://doi.org/10.1016/j.zemedi.2020.04.001)
-
-If you use DECAES in your research, please cite the following:
-
-```tex
-@article{DECAES.jl-2020,
-  title = {{{DECAES}} - {{DEcomposition}} and {{Component Analysis}} of {{Exponential Signals}}},
-  author = {Doucette, Jonathan and Kames, Christian and Rauscher, Alexander},
-  year = {2020},
-  month = may,
-  issn = {1876-4436},
-  doi = {10.1016/j.zemedi.2020.04.001},
-  journal = {Zeitschrift Fur Medizinische Physik},
-  keywords = {Brain,Luminal Water Imaging,MRI,Myelin Water Imaging,Prostate},
-  language = {eng},
-  pmid = {32451148}
-}
-```
