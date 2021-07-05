@@ -62,7 +62,7 @@ If your data is in DICOM format, the [freely available `dcm2niix` tool](https://
 The interface for processing an image file is as follows:
 
 ```bash
-$ julia --threads 4 -e 'using DECAES; main()' image.nii -- <COMMAND LINE ARGS>
+$ julia --threads 4 -e 'using DECAES; main()' -- image.nii <COMMAND LINE ARGS>
 ```
 
 Multithreaded parallel processing is enabled by setting the `julia` command line flag `--threads`, where `--threads N` enables parallel processing with `N` threads.
@@ -73,7 +73,7 @@ Alternatively, a Julia script `decaes.jl` is provided by this respository for co
 This script will load DECAES (installing it if necessary) and the CLI for you, and can be used as:
 
 ```bash
-$ julia --threads 4 decaes.jl image.nii -- <COMMAND LINE ARGS>
+$ julia --threads 4 decaes.jl -- image.nii <COMMAND LINE ARGS>
 ```
 
 All outputs are saved as `.mat` files; see the [documentation](https://jondeuce.github.io/DECAES.jl/dev/cli/#Outputs-1) for more information.
