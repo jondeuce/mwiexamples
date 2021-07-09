@@ -47,35 +47,63 @@ import GR; gr(); # static plots
 # ╔═╡ 4ee64b00-4ec7-4170-8d42-601463eb719b
 md"""
 # Load image data + apply mask + visualize
+Set the `image_filename` and `mask_filename` variables to point to the CPMG image file and corresponding mask file, respectively.
+
+Alternatively, generate a mask automatically using `bet` by setting `mask_filename = ""` and `betpath` and `betargs` to the path to the `bet` binary and the flags to pass to `bet`, respectively.
+
+Finally, optionally permute the first three dimensions of the image to view slices along different axes.
+For example, `(1,2,3,4)` is the identity permutation, `(2,1,3,4)` flips the image along the `x` and `y` axes, etc.
+Slices for viewing are then taken along the `z` dimension of the permuted image.
 """
 
 # ╔═╡ 422937ab-e376-4acb-a62e-204055dd917a
 begin
-	image   = DECAES.load_image("./data/images/image-194x110x8x56.nii.gz")
-	mask    = DECAES.load_image("./data/masks/image-194x110x8x56_mask.nii.gz")
-	image .*= mask
+	imagefile = "./data/images/image-194x110x8x56.nii.gz"
+	maskfile  = "./data/masks/image-194x110x8x56_mask.nii.gz"
+	betpath   = "bet"
+	betargs   = "-m -n -f 0.25 -R"
+
+	# Load image from file
+	image = DECAES.load_image(imagefile)
+
+	# Apply image mask
+	if !isempty(maskfile)
+		DECAES.try_apply_maskfile!(image, maskfile)
+	elseif !isempty(betpath) && !isempty(betargs)
+		DECAES.try_apply_bet!(image, betpath, betargs)
+	end
+
+    # Uncomment this line to permute image
+	#image = PermutedDimsArray(image, (2,1,3,4))
+end;
+
+# ╔═╡ ab1b6309-90bb-400b-9219-d55d3d354aaf
+md"""
+Helper function for plotting image slice:
+"""
+
+# ╔═╡ 0c82d2aa-793a-4bb0-a18e-5ca597e11914
+function plot_slice(img; kwargs...)
+	heatmap(
+		img[end:-1:begin, :];
+		aspect_ratio = 1,
+		axis = :off,
+		grid = :off,
+		ticks = :none,
+		kwargs...
+	)
 end;
 
 # ╔═╡ c92b0b10-0826-48b6-b6e8-5840a9633501
 md"""
 | Param | Value |
 |:-----:|:-----:|
-| slice | $(@bind slice Slider(axes(image, 3), default=cld(size(image, 3), 2), show_value=true)) |
-| echo  | $(@bind echo Slider(axes(image, 4), default=1, show_value=true)) |
+| slice | $(@bind slice NumberField(axes(image, 3), default=cld(size(image, 3), 2))) |
+| echo  | $(@bind echo NumberField(axes(image, 4), default=1)) |
 """
 
 # ╔═╡ de261b57-17e8-4a5d-85f4-ed8484e9b4a6
 begin
-	function plot_slice(img; kwargs...)
-		heatmap(
-			img[end:-1:begin, :];
-			# aspect_ratio = 1,
-			axis = :off,
-			grid = :off,
-			ticks = :none,
-			kwargs...
-		)
-	end;
 	plot_slice(
 		image[:,:,slice,echo] |> x -> x ./ maximum(x);
 		title = "slice #$slice, echo #$echo",
@@ -83,10 +111,9 @@ begin
 	)
 end
 
-# ╔═╡ 846036b1-36dc-4344-9ce2-2fbbdea02ff8
+# ╔═╡ 687791bf-b4aa-4adb-8c77-c51a7093c8d3
 md"""
-# Compute $T_2$ distribution
-### Set $T_2$ mapping parameters:
+### $T_2$ mapping parameters:
 """
 
 # ╔═╡ d0ce4eea-32e0-4cf1-b1b1-1aaecbe9d3c7
@@ -99,6 +126,24 @@ md"""
 |T2Range[2] | $(@bind T2Range_2_str TextField(default="2.0")) |
 | Reg | $(@bind Reg Select(["lcurve", "gcv", "chi2"])) |
 | Chi2Factor | $(@bind Chi2Factor_str TextField(default="1.02")) |
+"""
+
+# ╔═╡ bacd299e-e9ce-43ff-a087-8dfa0f78fdb7
+md"""
+### $T_2$ parts parameters:
+"""
+
+# ╔═╡ 99714066-9f57-4d51-ae2c-6d1628d20293
+md"""
+| Param | Value |
+|:-----:|:-----:|
+|SPWin Cutoff | $(@bind SPWin_Cutoff_str TextField(default="25e-3")) |
+|MPWin Cutoff | $(@bind MPWin_Cutoff_str TextField(default="200e-3")) |
+"""
+
+# ╔═╡ 846036b1-36dc-4344-9ce2-2fbbdea02ff8
+md"""
+# Compute $T_2$ distribution
 """
 
 # ╔═╡ 9fc40ea5-9451-4e5c-b53f-5b6c8e1ca4f6
@@ -151,15 +196,6 @@ end
 # ╔═╡ 88aaf959-a886-4199-af42-06254289feca
 md"""
 # Compute $T_2$ parts
-### Set $T_2$ parts parameters:
-"""
-
-# ╔═╡ 99714066-9f57-4d51-ae2c-6d1628d20293
-md"""
-| Param | Value |
-|:-----:|:-----:|
-|SPWin Cutoff | $(@bind SPWin_Cutoff_str TextField(default="25e-3")) |
-|MPWin Cutoff | $(@bind MPWin_Cutoff_str TextField(default="200e-3")) |
 """
 
 # ╔═╡ a7955625-856d-4225-8455-68ec04cbc976
@@ -1289,22 +1325,26 @@ version = "0.9.1+5"
 # ╠═7a2f2c2a-36bb-444f-919c-b357868f2528
 # ╟─4ee64b00-4ec7-4170-8d42-601463eb719b
 # ╠═422937ab-e376-4acb-a62e-204055dd917a
+# ╟─ab1b6309-90bb-400b-9219-d55d3d354aaf
+# ╠═0c82d2aa-793a-4bb0-a18e-5ca597e11914
 # ╟─c92b0b10-0826-48b6-b6e8-5840a9633501
-# ╟─de261b57-17e8-4a5d-85f4-ed8484e9b4a6
-# ╟─846036b1-36dc-4344-9ce2-2fbbdea02ff8
+# ╠═de261b57-17e8-4a5d-85f4-ed8484e9b4a6
+# ╟─687791bf-b4aa-4adb-8c77-c51a7093c8d3
 # ╟─d0ce4eea-32e0-4cf1-b1b1-1aaecbe9d3c7
+# ╟─bacd299e-e9ce-43ff-a087-8dfa0f78fdb7
+# ╟─99714066-9f57-4d51-ae2c-6d1628d20293
+# ╟─44bbb70e-1ff7-46c2-8f7b-0fc7f82111fc
+# ╟─688a8c4d-6a70-4344-b232-f5ee6defe298
+# ╟─0139e1b1-a8a6-4ec6-bb68-221ec7878f76
+# ╟─846036b1-36dc-4344-9ce2-2fbbdea02ff8
 # ╠═9fc40ea5-9451-4e5c-b53f-5b6c8e1ca4f6
 # ╠═7cdeaf10-6b0f-435c-bc25-0daaba5712bb
 # ╟─d05c9325-9a76-4fb0-99e4-8e9b25889633
 # ╠═f448fecf-b935-4ea8-b88f-a22019ef389c
-# ╟─0139e1b1-a8a6-4ec6-bb68-221ec7878f76
 # ╟─88aaf959-a886-4199-af42-06254289feca
-# ╟─99714066-9f57-4d51-ae2c-6d1628d20293
 # ╠═a7955625-856d-4225-8455-68ec04cbc976
 # ╠═98c11bb7-c01e-4440-b33a-6cf7daf108f5
 # ╟─f08cbc92-9363-443a-adf0-fd43549e6be0
 # ╠═851224b4-a178-4c46-88dc-35eb8b032a16
-# ╟─44bbb70e-1ff7-46c2-8f7b-0fc7f82111fc
-# ╟─688a8c4d-6a70-4344-b232-f5ee6defe298
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
