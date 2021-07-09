@@ -137,8 +137,10 @@ md"""
 md"""
 | Param | Value |
 |:-----:|:-----:|
-|SPWin Cutoff | $(@bind SPWin_Cutoff_str TextField(default="25e-3")) |
-|MPWin Cutoff | $(@bind MPWin_Cutoff_str TextField(default="200e-3")) |
+|SPWin[1] | $(@bind SPWin_1_str TextField(default=TE_str)) |
+|SPWin[2] | $(@bind SPWin_2_str TextField(default="25e-3")) |
+|MPWin[1] | $(@bind MPWin_1_str TextField(default=SPWin_2_str)) |
+|MPWin[2] | $(@bind MPWin_2_str TextField(default="200e-3")) |
 """
 
 # ╔═╡ 846036b1-36dc-4344-9ce2-2fbbdea02ff8
@@ -200,8 +202,8 @@ md"""
 
 # ╔═╡ a7955625-856d-4225-8455-68ec04cbc976
 begin
-	SPWin = (TE, SPWin_Cutoff_str |> f64)
-	MPWin = (SPWin_Cutoff_str, MPWin_Cutoff_str) .|> f64
+	SPWin = (SPWin_1_str, SPWin_2_str) .|> f64
+	MPWin = (MPWin_1_str, MPWin_2_str) .|> f64
 end;
 
 # ╔═╡ 98c11bb7-c01e-4440-b33a-6cf7daf108f5
