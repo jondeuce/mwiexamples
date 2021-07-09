@@ -7,6 +7,34 @@ For an introduction to Julia, see the [Julia documentation](https://docs.juliala
 DECAES provides methods for computing voxelwise [T2-distributions](https://doi.org/10.1016/0022-2364(89)90011-5) of multi spin-echo MRI images using the extended phase graph algorithm with stimulated echo corrections.
 Post-processing of these T2-distributions allows for the computation of measures such as the [myelin water fraction (MWF)](https://doi.org/10.1002/mrm.1910310614) used in myelin water imaging (MWI), or the [luminal water fraction (LWF)](https://doi.org/10.1148/radiol.2017161687) used in luminal water imaging (LWI).
 
+### Documentation
+
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://jondeuce.github.io/DECAES.jl/dev)
+
+In-depth documentation for DECAES can be found at the above link with information such as:
+* Command line interface API details
+* Julia API reference for using DECAES from within Julia
+* DECAES internals and algorithmic details
+
+If you use DECAES in your research, please cite the following:
+
+[![Z Med Phys](https://cdn.ncbi.nlm.nih.gov/corehtml/query/egifs/https:--linkinghub.elsevier.com-ihub-images-PubMedLink.gif)](https://doi.org/10.1016/j.zemedi.2020.04.001)
+
+```tex
+@article{DECAES.jl-2020,
+  title = {{{DECAES}} - {{DEcomposition}} and {{Component Analysis}} of {{Exponential Signals}}},
+  author = {Doucette, Jonathan and Kames, Christian and Rauscher, Alexander},
+  year = {2020},
+  month = may,
+  issn = {1876-4436},
+  doi = {10.1016/j.zemedi.2020.04.001},
+  journal = {Zeitschrift Fur Medizinische Physik},
+  keywords = {Brain,Luminal Water Imaging,MRI,Myelin Water Imaging,Prostate},
+  language = {eng},
+  pmid = {32451148}
+}
+```
+
 ### Benchmarks
 
 Due to performance optimizations enabled by Julia, DECAES is *fast*.
@@ -23,15 +51,6 @@ As an illustration, here is a comparison of the T2-distribution computation time
 
 For more benchmarks and for benchmarking details, see [DECAES.jl](https://github.com/jondeuce/DECAES.jl#benchmarks).
 
-## Documentation
-
-[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://jondeuce.github.io/DECAES.jl/dev)
-
-In-depth documentation for DECAES can be found at the above link with information such as:
-* Command line interface API details
-* Julia API reference for using DECAES from within Julia
-* DECAES internals and algorithmic details
-
 ## Quickstart
 
 ### Command Line Interface
@@ -43,7 +62,7 @@ If your data is in DICOM format, the [freely available `dcm2niix` tool](https://
 The interface for processing an image file is as follows:
 
 ```bash
-$ julia --threads 4 -e 'using DECAES; main()' image.nii -- <COMMAND LINE ARGS>
+$ julia --threads 4 -e 'using DECAES; main()' -- image.nii <COMMAND LINE ARGS>
 ```
 
 Multithreaded parallel processing is enabled by setting the `julia` command line flag `--threads`, where `--threads N` enables parallel processing with `N` threads.
@@ -54,7 +73,7 @@ Alternatively, a Julia script `decaes.jl` is provided by this respository for co
 This script will load DECAES (installing it if necessary) and the CLI for you, and can be used as:
 
 ```bash
-$ julia --threads 4 decaes.jl image.nii -- <COMMAND LINE ARGS>
+$ julia --threads 4 decaes.jl -- image.nii <COMMAND LINE ARGS>
 ```
 
 All outputs are saved as `.mat` files; see the [documentation](https://jondeuce.github.io/DECAES.jl/dev/cli/#Outputs-1) for more information.
@@ -115,6 +134,21 @@ There are two ways to install DECAES:
 **NOTE**: Julia is a ["just-ahead-of-time" compiled language](https://www.youtube.com/watch?v=7KGZ_9D_DbI), residing in between ahead-of-time (AOT) and just-in-time (JIT) compiled languages.
 Because of this, the first time DECAES is installed and run there may be several minutes of installation and compilation delay before processing starts.
 Subsequent runs will be much faster; typically, 5-10 seconds are needed to start Julia and load DECAES before processing begins.
+
+### Updating DECAES
+
+DECAES is implemented as a Julia package, hosted at the [DECAES.jl repository](https://github.com/jondeuce/DECAES.jl.git), allowing DECAES to be updated through the Julia package manager.
+To update DECAES, start `julia` from the command line, type `]` to enter the package manager REPL mode, and enter the following:
+
+```julia
+pkg> update DECAES
+```
+
+Or equivalently, enter the following command at the terminal:
+
+```bash
+$ julia -e 'import Pkg; Pkg.update("DECAES")'
+```
 
 ## Command Line Interface (CLI)
 
@@ -224,39 +258,3 @@ The scripts can also be easily modified to replace `julia` with `/path/to/julia`
 
 Running `./examples.sh` in the terminal or `examples` in MATLAB will execute the respective scripts.
 Results will be stored in a directory `output/`.
-
-## Updating DECAES
-
-DECAES is implemented as a Julia package, hosted at the [DECAES.jl repository](https://github.com/jondeuce/DECAES.jl.git), allowing DECAES to be updated through the Julia package manager.
-To update DECAES, start `julia` from the command line, type `]` to enter the package manager REPL mode, and enter the following:
-
-```julia
-pkg> update DECAES
-```
-
-Or equivalently, enter the following command at the terminal:
-
-```bash
-$ julia -e 'import Pkg; Pkg.update("DECAES")'
-```
-
-## Citing this work
-
-[![Z Med Phys](https://cdn.ncbi.nlm.nih.gov/corehtml/query/egifs/https:--linkinghub.elsevier.com-ihub-images-PubMedLink.gif)](https://doi.org/10.1016/j.zemedi.2020.04.001)
-
-If you use DECAES in your research, please cite the following:
-
-```tex
-@article{DECAES.jl-2020,
-  title = {{{DECAES}} - {{DEcomposition}} and {{Component Analysis}} of {{Exponential Signals}}},
-  author = {Doucette, Jonathan and Kames, Christian and Rauscher, Alexander},
-  year = {2020},
-  month = may,
-  issn = {1876-4436},
-  doi = {10.1016/j.zemedi.2020.04.001},
-  journal = {Zeitschrift Fur Medizinische Physik},
-  keywords = {Brain,Luminal Water Imaging,MRI,Myelin Water Imaging,Prostate},
-  language = {eng},
-  pmid = {32451148}
-}
-```
