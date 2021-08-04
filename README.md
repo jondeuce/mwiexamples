@@ -1,5 +1,9 @@
 # mwiexamples
 
+<p align="left">
+<img width="500px" src="https://github.com/jondeuce/DECAES.jl/blob/c2956262063841c8c2dc27f4e0ee20593ef32697/docs/src/assets/logo.gif">
+</p>
+
 This repository contains examples demonstrating usage of the DEcomposition and Component Analysis of Exponential Signals ([DECAES](https://bit.ly/DECAES)) tool,
 a *fast* implementation of the [MATLAB toolbox](https://mriresearch.med.ubc.ca/news-projects/myelin-water-fraction/) from the [UBC MRI Research Centre](https://mriresearch.med.ubc.ca/) written in the open-source [Julia programming language](https://julialang.org/).
 For an introduction to Julia, see the [Julia documentation](https://docs.julialang.org/en/v1/).
