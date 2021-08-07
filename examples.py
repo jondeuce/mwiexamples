@@ -9,26 +9,15 @@
 ####        https://github.com/JuliaPy/pyjulia#quick-usage
 ####
 
-import os
-import numpy as np
-import julia
-
-# (Optionally) configure Julia environment variables; must be done before PyJulia initialization
-os.environ["JULIA_NUM_THREADS"] = str(os.cpu_count()) # highly recommended for speed; set this equal to the number of threads available on your machine
-os.environ["JULIA_PROJECT"] = "" # optional; custom path to julia project environment
-
-# Initialize Julia runtime. Precompilation of Julia modules is not supported on Debian-based
-# Linux distributions such as Ubuntu, or python on installations via Conda.
-#   See: https://pyjulia.readthedocs.io/en/stable/troubleshooting.html#your-python-interpreter-is-statically-linked-to-libpython
-from julia.api import Julia
-jl = Julia(compiled_modules = False, runtime = "julia") # runtime can be modified to point to a specific julia runtime binary on your system, e.g. "/usr/local/julia-1.6.1/bin/julia"
-from julia import Base
-from julia import Pkg
-from julia import DECAES
+import decaes
+decaes.initialize()
+from decaes import DECAES
 
 ####
 #### Example using mock image for proof-of-concept demonstration
 ####
+
+import numpy as np
 
 # Create mock image
 TE     = 10e-3 # arbitrary mock echo time
