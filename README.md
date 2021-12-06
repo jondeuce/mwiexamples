@@ -6,6 +6,7 @@
 
 This repository contains examples demonstrating usage of the DEcomposition and Component Analysis of Exponential Signals ([DECAES](https://bit.ly/DECAES)) tool,
 a *fast* implementation of the [MATLAB toolbox](https://mriresearch.med.ubc.ca/news-projects/myelin-water-fraction/) from the [UBC MRI Research Centre](https://mriresearch.med.ubc.ca/) written in the open-source [Julia programming language](https://julialang.org/).
+The source code for DECAES can be found at the package repository: [DECAES.jl](https://github.com/jondeuce/DECAES.jl).
 For an introduction to Julia, see the [Julia documentation](https://docs.julialang.org/en/v1/).
 
 DECAES provides methods for computing voxelwise [T2-distributions](https://doi.org/10.1016/0022-2364(89)90011-5) of multi spin-echo MRI images using the extended phase graph algorithm with stimulated echo corrections.
