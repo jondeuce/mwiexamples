@@ -54,8 +54,6 @@ As an illustration, here is a comparison of the T2-distribution computation time
 
 </center>
 
-For more benchmarks and for benchmarking details, see [DECAES.jl](https://github.com/jondeuce/DECAES.jl#benchmarks).
-
 ## Quickstart
 
 ### Command Line Interface
@@ -67,33 +65,33 @@ If your data is in DICOM format, the [freely available `dcm2niix` tool](https://
 The interface for processing an image file is as follows:
 
 ```bash
-$ julia --threads 4 -e 'using DECAES; main()' -- image.nii <COMMAND LINE ARGS>
+$ julia --threads=auto -e 'using DECAES; main()' -- image.nii <COMMAND LINE ARGS>
 ```
 
-Multithreaded parallel processing is enabled by setting the `julia` command line flag `--threads`, where `--threads N` enables parallel processing with `N` threads.
-The file `image.nii` is the image to be processed, and the Julia code `using DECAES; main()` loads DECAES and the CLI entrypoint function.
+Multithreaded parallel processing is enabled by setting the `julia` command line flag `--threads=auto`.
+The file `image.nii` is the image to be processed, and the Julia code `'using DECAES; main()'` loads DECAES and the CLI entrypoint function.
 Command line arguments are [introduced below](#command-line-interface), and detailed in the [documentation](https://jondeuce.github.io/DECAES.jl/dev/cli).
 
-Alternatively, a Julia script `decaes.jl` is provided by this respository for convenience.
+Alternatively, a Julia script [`decaes.jl`](https://github.com/jondeuce/mwiexamples/blob/master/decaes.jl) is provided by this respository for convenience.
 This script will load DECAES (installing it if necessary) and the CLI for you, and can be used as:
 
 ```bash
-$ julia --threads 4 decaes.jl -- image.nii <COMMAND LINE ARGS>
+$ julia --threads=auto decaes.jl -- image.nii <COMMAND LINE ARGS>
 ```
 
 All outputs are saved as `.mat` files; see the [documentation](https://jondeuce.github.io/DECAES.jl/dev/cli/#Outputs-1) for more information.
 
 ### MATLAB Interface
 
-The DECAES CLI can be called from within MATLAB using the function `decaes.m` provided by this repository.
-The below example processes `image.nii` using 4 threads; see the `decaes.m` function documentation for details:
+The DECAES CLI can be called from within MATLAB using the function [`decaes.m`](https://github.com/jondeuce/mwiexamples/blob/master/decaes.m) provided by this repository.
+The below example processes `image.nii` using multiple threads (note that the MATLAB interface starts Julia multithreaded by default for convenience; see the `decaes.m` function documentation for details):
 
 ```MATLAB
->> decaes('--threads', 4, 'image.nii', <COMMAND LINE ARGS>...) % function syntax
->> decaes --threads 4 image.nii <COMMAND LINE ARGS> % or equivalently, command syntax
+>> decaes('image.nii', <COMMAND LINE ARGS>...) % function syntax
+>> decaes image.nii <COMMAND LINE ARGS> % or equivalently, command syntax
 ```
 
-**NOTE**: The examples in this README using the CLI are easily translated to MATLAB: simply replace command line statements such as `julia --threads 4 decaes.jl ...` with the equivalent MATLAB command `decaes --threads 4 ...`
+**NOTE**: The examples in this README using the CLI are easily translated to MATLAB: simply replace command line statements such as `julia --threads=auto decaes.jl <COMMAND LINE ARGS>` with the equivalent MATLAB command `decaes <COMMAND LINE ARGS>`
 
 ## Installation
 
@@ -190,7 +188,7 @@ They should be carefully chosen, and most importantly, used consistently when co
 The most straightforward usage is to call `julia` on the `decaes.jl` script provided by this repository, passing the input image filename and analysis settings as command line arguments:
 
 ```bash
-$ julia --threads 4 decaes.jl -- data/images/image-194x110x1x56.nii.gz \
+$ julia --threads=auto decaes.jl -- data/images/image-194x110x1x56.nii.gz \
   --T2map --T2part --TE 7e-3 --nT2 40 \
   --T2Range 10e-3 2.0 --SPWin 10e-3 25e-3 --MPWin 25e-3 200e-3 --Reg lcurve \
   --output output/basic/
@@ -213,7 +211,7 @@ Image masks can be passed in for processing.
 We can process the image file `data/images/image-194x110x8x56.nii.gz` using the brain mask `data/masks/image-194x110x8x56_mask.nii.gz` as follows:
 
 ```bash
-$ julia --threads 4 decaes.jl -- data/images/image-194x110x8x56.nii.gz \
+$ julia --threads=auto decaes.jl -- data/images/image-194x110x8x56.nii.gz \
   --T2map --T2part --TE 7e-3 --nT2 40 \
   --T2Range 10e-3 2.0 --SPWin 10e-3 25e-3 --MPWin 25e-3 200e-3 --Reg gcv \
   --mask data/masks/image-194x110x8x56_mask.nii.gz \
@@ -228,7 +226,7 @@ Multiple files can be passed in for processing.
 Here, we process both images from the above examples, this time using brain masks for both images:
 
 ```bash
-$ julia --threads 4 decaes.jl -- \
+$ julia --threads=auto decaes.jl -- \
   data/images/image-194x110x1x56.nii.gz \
   data/images/image-194x110x8x56.nii.gz \
   --T2map --T2part --TE 7e-3 --nT2 40 \
@@ -245,9 +243,9 @@ Flags and parameters can be passed in from settings file by prepending the `@` c
 Using the settings files in the `data/` folder, we can re-run the above examples as follows:
 
 ```bash
-$ julia --threads 4 decaes.jl -- @data/example1.txt
-$ julia --threads 4 decaes.jl -- @data/example2.txt
-$ julia --threads 4 decaes.jl -- @data/example3.txt
+$ julia --threads=auto decaes.jl -- @data/example1.txt
+$ julia --threads=auto decaes.jl -- @data/example2.txt
+$ julia --threads=auto decaes.jl -- @data/example3.txt
 ```
 
 These results will be stored in the folders `output/example1/`, `output/example2/`, and `output/example3/`, as specified by the settings files.
