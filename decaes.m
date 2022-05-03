@@ -147,6 +147,7 @@ function cmd = jl_build_cmd(opts)
     jl_cmd_args = {
         opts.runtime
         '--startup-file=no'
+        '--quiet'
         '--optimize=3'
         sprintf('--threads=%s', opts.threads)
     };
@@ -176,7 +177,7 @@ function st = jl_call_decaes_server(opts, decaes_args)
 
     % Cleanup function for sending kill signal to DECAES server
     function kill_server()
-        fprintf('* Killing DECAES server\n');
+        fprintf('[ Info: Killing DECAES server\n');
         kill_script = jl_make_script('DaemonMode', 'sendExitCode()');
         cleanup_kill_script = onCleanup(@() delete([kill_script, '*']));
         cmd = [jl_build_cmd(opts), ' ', kill_script];
@@ -188,7 +189,7 @@ function st = jl_call_decaes_server(opts, decaes_args)
 
     if isempty(cleanup_server)
         % Create and run system command to start DECAES server
-        fprintf('* Starting DECAES server\n');
+        fprintf('[ Info: Starting DECAES server\n');
         server_script = jl_make_script('DaemonMode', 'serve()');
         cleanup_server_script = onCleanup(@() delete([server_script, '*']));
         cmd = [jl_build_cmd(opts), ' ', server_script, ' &'];
@@ -264,14 +265,14 @@ function jl_str = jl_using_package_str(pkg, install)
     jl_str = {
         'import Pkg'
         'if __INSTALL__ != 0'
-        '    println("* Installing __PACKAGE__")'
+        '    println("[ Info: Installing __PACKAGE__")'
         '    Pkg.add("__PACKAGE__"; io = devnull)'
         '    @eval using __PACKAGE__'
         'end'
         'try'
         '    @eval using __PACKAGE__'
         'catch e'
-        '    println("* Installing __PACKAGE__")'
+        '    println("[ Info: Installing __PACKAGE__")'
         '    Pkg.add("__PACKAGE__"; io = devnull)'
         '    @eval using __PACKAGE__'
         'end'
@@ -314,6 +315,45 @@ function proj = default_project()
 
     [decaes_dir, ~, ~] = fileparts(mfilename('fullpath'));
     proj = fullfile(decaes_dir, '.decaes');
+
+end
+
+function runtime = try_find_julia_runtime()
+
+    % Cached julia runtime location
+    persistent JULIA_RUNTIME
+
+    if ~isempty(JULIA_RUNTIME)
+        runtime = JULIA_RUNTIME;
+        return
+    end
+
+    % Try to find the default system julia
+    if isunix
+        [st, res] = system('which julia');
+    elseif ispc
+        [st, res] = system('where julia');
+    end
+
+    if st == 0
+        runtime = strtrim(res);
+    else
+        runtime = 'julia'; % default value
+    end
+
+    % Try calling Julia
+    jl_sys_bindir = tempname;
+    cleanup_fid = onCleanup(@() delete([jl_sys_bindir, '*']));
+
+    cmd = sprintf('%s --startup-file=no --quiet -e ''open(raw"%s"; write = true) do io; print(io, joinpath(Base.Sys.BINDIR, Base.julia_exename())); end''', runtime, jl_sys_bindir);
+    [st, ~] = system(cmd);
+
+    if st == 0
+        runtime = strtrim(fileread(jl_sys_bindir));
+    end
+
+    % Cache julia runtime path
+    JULIA_RUNTIME = runtime;
 
 end
 
@@ -371,11 +411,15 @@ function [opts, decaes_args] = parse_args(varargin)
 
     % Parse Matlab inputs
     p = inputParser;
-    addParameter(p, 'runtime', 'julia', @ischar);
+    addParameter(p, 'runtime', '', @ischar);
     addParameter(p, 'threads', 'auto', @(x) strcmpi(x, 'auto') || ~isnan(check_positive_int(x)));
     addParameter(p, 'project', default_project, @ischar);
     addParameter(p, 'server', false, @islogical);
     parse(p, mat_args{:});
     opts = p.Results;
+
+    if isempty(opts.runtime)
+        opts.runtime = try_find_julia_runtime;
+    end
 
 end
