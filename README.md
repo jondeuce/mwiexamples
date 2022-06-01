@@ -9,8 +9,9 @@ a *fast* implementation of the [MATLAB toolbox](https://mriresearch.med.ubc.ca/n
 The source code for DECAES can be found at the [DECAES.jl package repository](https://github.com/jondeuce/DECAES.jl).
 For an introduction to Julia, see the [Julia documentation](https://docs.julialang.org/en/v1/).
 
-DECAES provides methods for computing voxelwise [T2-distributions](https://doi.org/10.1016/0022-2364(89)90011-5) of multi spin-echo MRI images using the extended phase graph algorithm with stimulated echo corrections.
-Post-processing of these T2-distributions allows for the computation of measures such as the [myelin water fraction (MWF)](https://doi.org/10.1002/mrm.1910310614) used in myelin water imaging (MWI), or the [luminal water fraction (LWF)](https://doi.org/10.1148/radiol.2017161687) used in luminal water imaging (LWI).
+DECAES provides methods for performing *fast* multiexponential analysis tailored to magnetic resonance imaging (MRI) applications.
+Voxelwise [T2-distributions](https://doi.org/10.1016/0022-2364(89)90011-5) of multi spin-echo MRI images are computed by projecting measured MR signals onto basis signals using regularized nonnegative least-squares (NNLS); basis signals are computed using the extended phase graph (EPG) algorithm with additional stimulated echo correction.
+Post-processing these T2-distributions allows for computating measures such as the [myelin water fraction (MWF)](https://doi.org/10.1002/mrm.1910310614) used in myelin water imaging (MWI) and the [luminal water fraction (LWF)](https://doi.org/10.1148/radiol.2017161687) used in luminal water imaging (LWI).
 
 ### Documentation
 
@@ -43,14 +44,17 @@ If you use DECAES in your research, please cite the following:
 ### Benchmarks
 
 Due to performance optimizations enabled by Julia, DECAES is *fast*.
-As an illustration, here is a comparison of the T2-distribution computation times between DECAES and the original MATLAB version:
+As an illustration, here is a comparison between DECAES and [UBC MWF MATLAB toolbox](https://github.com/ubcmri/ubcmwf) T2-distribution computation times for two multi spin-echo (MSE) datasets:
 
 <center>
 
-| Dataset      | Image Size           | MATLAB      | Julia      |
-| :---:        | :---:                | :---:       | :---:      |
-| 48-echo CPMG | 240 x 240 x 48 x 48  | 1h:29m:35s  | **1m:24s** |
-| 56-echo CPMG | 240 x 240 x 113 x 56 | 2h:25m:19s  | **2m:20s** |
+| Dataset     | Matrix Size     | CPU               | Cores | MATLAB     | **DECAES** |
+| :---:       | :---:           | :---:             | :---: | :---:      | :---:      |
+| 48-echo MSE | 240 x 240 x 48  | Intel i5 4200U    | 2     | 4h:35m:18s | **7m:49s** |
+| 56-echo MSE | 240 x 240 x 113 | Xeon E5-2640 (x2) | 12    | 1h:25m:01s | **2m:39s** |
+| 48-echo MSE | 240 x 240 x 48  | Xeon E5-2640 (x2) | 12    | 59m:40s    | **1m:40s** |
+| 56-echo MSE | 240 x 240 x 113 | Ryzen 9 3950X     | 16    | 22m:33s    | **43s**    |
+| 48-echo MSE | 240 x 240 x 48  | Ryzen 9 3950X     | 16    | 17m:56s    | **27s**    |
 
 </center>
 
@@ -102,6 +106,7 @@ However, this repository provides the following items which may prove useful to 
 * Example MWI data, brain masks, and a corresponding `examples.sh` script illustrating how to process the example data
 * The `decaes.jl` convenience script for installing DECAES and calling the DECAES CLI
 * The `decaes.m` MATLAB function for installing DECAES and calling DECAES from MATLAB
+* The `decaes.py` Python module for calling the DECAES Julia API from Python
 
 There are two ways to clone this repository:
 
@@ -119,11 +124,15 @@ To use DECAES, Julia version 1.6.0 or higher is required:
 1. Visit the [Julia downloads page](https://julialang.org/downloads/) and download Julia v1.6.0 or higher for your operating system (use the most up-to-date stable release of Julia for best performance)
 2. After placing the downloaded folder (named e.g. `julia-1.6.0`) in an appropriate location, add the `julia` executable (located in e.g. `julia-1.6.0/bin/julia`) to your system path
 
+Alternatively:
+
+1. Download the [`juliaup`](https://github.com/JuliaLang/juliaup) cross-platform Julia installer and follow the [installation instructions](https://github.com/JuliaLang/juliaup#installation)
+
 ### Installing DECAES
 
 There are two ways to install DECAES:
 
-1. Use the example script `decaes.jl` or MATLAB function `decaes.m` provided by this repository; DECAES will automatically be installed (if necessary) when used through these interfaces
+1. Use the example script `decaes.jl`, MATLAB function `decaes.m`, or Python module `decaes.py` provided by this repository; DECAES will automatically be installed (if necessary) when used through these interfaces
 
 2.  Start `julia` from the command line, type `]` to enter the package manager REPL mode (the `julia>` prompt will be replaced by a `pkg>` prompt), and enter the following command:
 
@@ -174,7 +183,7 @@ They should be carefully chosen, and most importantly, used consistently when co
 * The matrix size and number of echoes `MatrixSize` and `nTE`; these are inferred from the size of the input image
 * The echo time `TE` (units: seconds). Must correspond to scanning protocol
 * The number of T2 bins `nT2`. Typically, `nT2 = 40` will be a good default, but note that increasing `nT2` or otherwise decreasing the spacing between T2 values (such as by decreasing the width of `T2Range`) may require more regularization
-* The range of T2 values `T2Range` (units: seconds). The lower bound should be on the order of `TE`, as T2 components much smaller than `TE` are not well captured by the CPMG signal. Similarly, the upper bound of the `T2Range` typically should not be much higher than a small multiple of the last sampled echo time `nTE * TE`, as arbitrarily high T2 values cannot be recovered
+* The range of T2 values `T2Range` (units: seconds). The lower bound should be on the order of `TE`, as T2 components much smaller than `TE` are not well captured by the MSE signal. Similarly, the upper bound of the `T2Range` typically should not be much higher than a small multiple of the last sampled echo time `nTE * TE`, as arbitrarily high T2 values cannot be recovered
 * The small and middle peak windows `SPWin` and `MPWin` (units: seconds):
     * For myelin water imaging, the myelin vs. intra/extra-cellular water cutoff should be chosen based on the T2 distribution. For example, plotting the mean T2 distribution over white matter voxels should reveal two distinct peaks from which a cutoff value can be chosen. Typical values may be `SPWin = [TE, 25e-3]` and `MPWin = [25e-3, 200e-3]`, where `SPWin` controls the myelin water window
     * Similar methods should be used for luminal water imaging. In LWI, `MPWin` controls the luminal water window. Typical values may be `SPWin = [TE, 200e-3]` and `MPWin = [200e-3, T2Range(2)]`, where `T2Range(2)` is the upper bound of `T2Range`
