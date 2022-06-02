@@ -199,7 +199,7 @@ The most straightforward usage is to call `julia` on the `decaes.jl` script prov
 ```bash
 $ julia --threads=auto decaes.jl -- data/images/image-194x110x1x56.nii.gz \
   --T2map --T2part --TE 7e-3 --nT2 40 \
-  --T2Range 10e-3 2.0 --SPWin 10e-3 25e-3 --MPWin 25e-3 200e-3 --Reg lcurve \
+  --T2Range 7e-3 2.0 --SPWin 7e-3 25e-3 --MPWin 25e-3 200e-3 --Reg lcurve \
   --output output/basic/
 ```
 
@@ -207,7 +207,7 @@ $ julia --threads=auto decaes.jl -- data/images/image-194x110x1x56.nii.gz \
 * The flags `--T2map` and `--T2part` are passed, indicating that both T2-distribution computation and T2-parts analysis (to compute e.g. the myelin water fraction) will be performed
 * The flag `--TE` is passed with argument `7e-3`, setting the echo times to 7 ms, 14 ms, ...
 * The flag `--nT2` is passed with argument `40`, setting the number of T2 components to 40
-* The flag `--T2Range` is passed with argument `10e-3 2.0` to set the range of T2 values for the T2-distribution; the `--SPWin` and `--MPWin` flags similarly set the short peak and middle peak windows
+* The flag `--T2Range` is passed with argument `7e-3 2.0` to set the range of T2 values for the T2-distribution; the `--SPWin` and `--MPWin` flags similarly set the short peak and middle peak windows
 * The flag `--Reg` is passed with argument `lcurve`, specifying that the L-curve regularization method will be used
 * The flag `--output` is passed with argument `output/basic/`.
 The folder `output/basic/` will be created if it does not already exist, and the T2-distribution and T2-parts results will be stored there as `.mat` files.
@@ -222,7 +222,7 @@ We can process the image file `data/images/image-194x110x8x56.nii.gz` using the 
 ```bash
 $ julia --threads=auto decaes.jl -- data/images/image-194x110x8x56.nii.gz \
   --T2map --T2part --TE 7e-3 --nT2 40 \
-  --T2Range 10e-3 2.0 --SPWin 10e-3 25e-3 --MPWin 25e-3 200e-3 --Reg gcv \
+  --T2Range 7e-3 2.0 --SPWin 7e-3 25e-3 --MPWin 25e-3 200e-3 --Reg gcv \
   --mask data/masks/image-194x110x8x56_mask.nii.gz \
   --output output/masked/
 ```
@@ -239,7 +239,7 @@ $ julia --threads=auto decaes.jl -- \
   data/images/image-194x110x1x56.nii.gz \
   data/images/image-194x110x8x56.nii.gz \
   --T2map --T2part --TE 7e-3 --nT2 40 \
-  --T2Range 10e-3 2.0 --SPWin 10e-3 25e-3 --MPWin 25e-3 200e-3 --Reg chi2 --Chi2Factor 1.02 \
+  --T2Range 7e-3 2.0 --SPWin 7e-3 25e-3 --MPWin 25e-3 200e-3 --Reg chi2 --Chi2Factor 1.02 \
   --mask \
   data/masks/image-194x110x1x56_mask.nii.gz \
   data/masks/image-194x110x8x56_mask.nii.gz \
