@@ -58,6 +58,10 @@ As an illustration, here is a comparison between DECAES and [UBC MWF MATLAB tool
 
 </center>
 
+### Tutorial
+
+[![DECAES.jl Software Tutorial: Myelin and Luminal Water Imaging in under 1 Minute](https://imgur.com/Ulh6jA0.png)](https://www.youtube.com/watch?v=xCKWWNywOTw)
+
 ## Quickstart
 
 ### Command Line Interface
