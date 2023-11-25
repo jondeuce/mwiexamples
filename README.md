@@ -123,14 +123,7 @@ There are two ways to clone this repository:
 
 ### Downloading Julia
 
-To use DECAES, Julia version 1.6.0 or higher is required. We recommend installing Julia via [`juliaup`](https://github.com/JuliaLang/juliaup), a cross-platform installer for the Julia programming language:
-
-1. Download [`juliaup`](https://github.com/JuliaLang/juliaup) and follow the [installation instructions](https://github.com/JuliaLang/juliaup#installation)
-
-Alternatively, you can download Julia manually:
-
-1. Visit the [Julia downloads page](https://julialang.org/downloads/) and download Julia v1.6.0 or higher for your operating system (use the most up-to-date stable release of Julia for best performance)
-2. After placing the downloaded folder (named e.g. `julia-1.6.0`) in an appropriate location, add the `julia` executable (located in e.g. `julia-1.6.0/bin/julia`) to your system path
+To use DECAES, Julia version 1.9.0 or higher is required. We recommend installing Julia via the [`juliaup`](https://github.com/JuliaLang/juliaup) cross-platform Julia installer. Please see the [`juliaup` installation instructions](https://github.com/JuliaLang/juliaup#installation) for details.
 
 ### Installing DECAES
 
