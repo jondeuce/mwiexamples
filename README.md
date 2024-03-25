@@ -1,7 +1,7 @@
 # mwiexamples
 
 <p align="left">
-<img width="500px" src="https://github.com/jondeuce/DECAES.jl/blob/c2956262063841c8c2dc27f4e0ee20593ef32697/docs/src/assets/logo.gif">
+<img width="500px" src="https://github.com/jondeuce/DECAES.jl/blob/master/docs/src/assets/logo.gif">
 </p>
 
 This repository contains examples demonstrating usage of the DEcomposition and Component Analysis of Exponential Signals ([DECAES](https://bit.ly/DECAES)) tool,
@@ -41,26 +41,26 @@ If you use DECAES in your research, please cite the following:
 ## Quickstart
 
 Example usage of the DECAES [command line interface (CLI)](https://jondeuce.github.io/DECAES.jl/dev/cli) to process two example multi spin-echo images provided in the `data/` folder of this repository.
-See the [tutorial](https://github.com/jondeuce/mwiexamples/blob/master/README.md#tutorial) below for detailed descriptions of the CLI arguments.
+See the [tutorial](https://github.com/jondeuce/mwiexamples/tree/master#tutorial) below for detailed descriptions of the CLI arguments.
 
 ```bash
 $ julia --project=@decaes -e 'import Pkg; Pkg.add("DECAES"); Pkg.build("DECAES")' # build DECAES CLI
 
 $ decaes \ # run CLI launcher script stored in ~/.julia/bin
-  data/images/image-194x110x1x56.nii.gz \ # multi spin-echo images to process
-  data/images/image-194x110x8x56.nii.gz \
-  --mask \
-  data/masks/image-194x110x1x56_mask.nii.gz \ # brain masks corresponding to input images
-  data/masks/image-194x110x8x56_mask.nii.gz \
-  --output output/quickstart/ \ # output directory
-  --T2map \ # compute T2 distribution and derived quantities, e.g. geometric mean T2
-  --T2part \ # compute T2-parts from T2 distribution, e.g. myelin water fraction
-  --TE 7e-3 \ # uniform echo spacing (seconds)
-  --nT2 40 \ # number of T2 components
-  --T2Range 7e-3 2.0 \ # range of logarithmically-spaced T2 components (seconds)
-  --SPWin 7e-3 25e-3 \ # small peak window/short T2 range
-  --MPWin 25e-3 200e-3 \ # middle peak window/long T2 range
-  --Reg lcurve # regularization method (L-curve recommended)
+> data/images/image-194x110x1x56.nii.gz \ # multi spin-echo images to process
+> data/images/image-194x110x8x56.nii.gz \
+> --mask \
+> data/masks/image-194x110x1x56_mask.nii.gz \ # brain masks corresponding to input images
+> data/masks/image-194x110x8x56_mask.nii.gz \
+> --output output/quickstart/ \ # output directory
+> --T2map \ # compute T2 distribution and derived quantities, e.g. geometric mean T2
+> --T2part \ # compute T2-parts from T2 distribution, e.g. myelin water fraction
+> --TE 7e-3 \ # uniform echo spacing (seconds)
+> --nT2 40 \ # number of T2 components
+> --T2Range 7e-3 2.0 \ # range of logarithmically-spaced T2 components (seconds)
+> --SPWin 7e-3 25e-3 \ # small peak window/short T2 range
+> --MPWin 25e-3 200e-3 \ # middle peak window/long T2 range
+> --Reg lcurve # regularization method (L-curve recommended)
 ```
 
 ## Installation
@@ -177,9 +177,9 @@ Process a single input image, setting only the required parameters:
 
 ```bash
 $ decaes data/images/image-194x110x1x56.nii.gz \
-  --T2map --T2part --TE 7e-3 --nT2 40 \
-  --T2Range 7e-3 2.0 --SPWin 7e-3 25e-3 --MPWin 25e-3 200e-3 --Reg lcurve \
-  --output output/basic/
+> --T2map --T2part --TE 7e-3 --nT2 40 \
+> --T2Range 7e-3 2.0 --SPWin 7e-3 25e-3 --MPWin 25e-3 200e-3 --Reg lcurve \
+> --output output/basic/
 ```
 
 * The 4D image file `data/images/image-194x110x1x56.nii.gz` is passed as the first argument
@@ -201,10 +201,10 @@ We can process the image file `data/images/image-194x110x8x56.nii.gz` using the 
 
 ```bash
 $ decaes data/images/image-194x110x8x56.nii.gz \
-  --T2map --T2part --TE 7e-3 --nT2 40 \
-  --T2Range 7e-3 2.0 --SPWin 7e-3 25e-3 --MPWin 25e-3 200e-3 --Reg gcv \
-  --mask data/masks/image-194x110x8x56_mask.nii.gz \
-  --output output/masked/
+> --T2map --T2part --TE 7e-3 --nT2 40 \
+> --T2Range 7e-3 2.0 --SPWin 7e-3 25e-3 --MPWin 25e-3 200e-3 --Reg gcv \
+> --mask data/masks/image-194x110x8x56_mask.nii.gz \
+> --output output/masked/
 ```
 
 These results will be stored in the folder `output/masked/`.
@@ -216,14 +216,14 @@ Here, we process both images from the above examples, this time using brain mask
 
 ```bash
 $ decaes \
-  data/images/image-194x110x1x56.nii.gz \
-  data/images/image-194x110x8x56.nii.gz \
-  --T2map --T2part --TE 7e-3 --nT2 40 \
-  --T2Range 7e-3 2.0 --SPWin 7e-3 25e-3 --MPWin 25e-3 200e-3 --Reg chi2 --Chi2Factor 1.02 \
-  --mask \
-  data/masks/image-194x110x1x56_mask.nii.gz \
-  data/masks/image-194x110x8x56_mask.nii.gz \
-  --output output/multiple/
+> data/images/image-194x110x1x56.nii.gz \
+> data/images/image-194x110x8x56.nii.gz \
+> --T2map --T2part --TE 7e-3 --nT2 40 \
+> --T2Range 7e-3 2.0 --SPWin 7e-3 25e-3 --MPWin 25e-3 200e-3 --Reg chi2 --Chi2Factor 1.02 \
+> --mask \
+> data/masks/image-194x110x1x56_mask.nii.gz \
+> data/masks/image-194x110x8x56_mask.nii.gz \
+> --output output/multiple/
 ```
 
 ### Passing parameters from a settings file
@@ -239,16 +239,19 @@ $ decaes @data/example3.txt
 
 These results will be stored in the folders `output/example1/`, `output/example2/`, and `output/example3/`, as specified by the settings files.
 
-Extra parameters can also be passed to override settings files:
+The use of settings files is *highly* recommended for reproducibility and self-documentation, as a copy of the input settings file will be automatically saved in the output folder.
+For more information on creating settings files, see the [documentation](https://jondeuce.github.io/DECAES.jl/dev/cli/#Settings-files-1).
+
+### Default settings files
+
+Often, one has a standard set of parameters that is used for T2 distribution analysis, but may be interested in varying a small number of parameters one-by-one to see their effect on the T2 distribution/derived metrics.
+For example, one may wish to compare regularization methods or change the number of T2 components.
+
+This can be easily done by passing in extra parameters to override default settings stored in a settings file:
 
 ```bash
-$ decaes @data/example3.txt --Reg lcurve --nT2 60
+$ decaes @data/example1.txt --Reg gcv --nT2 60
 ```
-
-A common use-case for this is to create a settings file with default parameters and then vary parameters of interest one-by-one to see their effect on the output T2 distributions/derived metrics.
-
-The use of settings files is highly recommended for reproducibility and self-documentation, as a copy of the input settings file will be automatically saved in the output folder.
-For more information on creating settings files, see the [documentation](https://jondeuce.github.io/DECAES.jl/dev/cli/#Settings-files-1).
 
 ## MATLAB Interface
 
@@ -268,11 +271,10 @@ The below example processes `image.nii` using multiple threads using `decaes.m`:
 ### Example scripts
 
 The scripts `examples.sh` and `examples.m` provided by this repository demonstrate the three example invocations of DECAES above.
-The only requirement for these scripts to run is that the `julia` executable is on your system path and that DECAES is installed.
-The scripts can also be easily modified to replace `julia` with `/path/to/julia` on your system, if necessary.
+These scripts require only that [`julia` is installed](https://github.com/jondeuce/mwiexamples#downloading-julia) and that [DECAES is installed](https://github.com/jondeuce/mwiexamples/tree/master#installation).
 
 Running `./examples.sh` in the terminal or `examples` in MATLAB will execute the respective scripts.
-Results will be stored in a directory `output/`.
+Results will be stored in a directory `./output/`.
 
 ### DECAES Tutorial 2022
 

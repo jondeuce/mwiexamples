@@ -12,8 +12,8 @@ decaes('--threads', 'auto',                  ... % Number of threads
     '--T2part',                              ... % T2 parts
     '--TE', 7e-3,                            ... % Echo time
     '--nT2', 40,                             ... % Number of T2 bins
-    '--T2Range', [7e-3, 2.0],               ... % T2 Range
-    '--SPWin', [7e-3, 25e-3],               ... % SP window
+    '--T2Range', [7e-3, 2.0],                ... % T2 Range
+    '--SPWin', [7e-3, 25e-3],                ... % SP window
     '--MPWin', [25e-3, 200e-3],              ... % MP window
     '--Reg', 'lcurve',                       ... % Regularization method
     '--output', 'output/basic/')                 % Output folder
