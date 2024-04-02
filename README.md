@@ -1,8 +1,6 @@
 # mwiexamples
 
-<p align="left">
-<img width="500px" src="https://github.com/jondeuce/DECAES.jl/blob/master/docs/src/assets/logo.gif">
-</p>
+<p align="left"> <img width="500px" src="https://github.com/jondeuce/DECAES.jl/blob/master/docs/src/assets/logo.gif"> </p>
 
 This repository contains examples demonstrating usage of the DEcomposition and Component Analysis of Exponential Signals ([DECAES](https://bit.ly/DECAES)) tool,
 a *fast* implementation of the [MATLAB toolbox](https://mriresearch.med.ubc.ca/news-projects/myelin-water-fraction/) from the [UBC MRI Research Centre](https://mriresearch.med.ubc.ca/) written in the open-source [Julia programming language](https://julialang.org/).
@@ -15,13 +13,18 @@ Post-processing these T2-distributions allows for computating measures such as t
 
 ## Documentation
 
+<!-- [![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://jondeuce.github.io/DECAES.jl/stable) -->
 [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://jondeuce.github.io/DECAES.jl/dev)
+[![Source](https://img.shields.io/badge/source-github-blue)](https://github.com/jondeuce/DECAES.jl)
+<a href="https://doi.org/10.1016/j.zemedi.2020.04.001"> <img src="https://cdn.ncbi.nlm.nih.gov/corehtml/query/egifs/https:--linkinghub.elsevier.com-ihub-images-PubMedLink.gif" height="20"> </a>
+<!-- [![Z Med Phys](https://cdn.ncbi.nlm.nih.gov/corehtml/query/egifs/https:--linkinghub.elsevier.com-ihub-images-PubMedLink.gif)](https://doi.org/10.1016/j.zemedi.2020.04.001) -->
 
-In-depth documentation for DECAES can be found at the above link with information such as command line interface API details, Julia API reference for using DECAES from within Julia, and DECAES internals and algorithmic details.
+<!-- [![Build Status](https://github.com/jondeuce/DECAES.jl/actions/workflows/CI.yml/badge.svg?branch=master)](https://github.com/jondeuce/DECAES.jl/actions/workflows/CI.yml?query=branch%3Amaster) -->
+<!-- [![codecov.io](https://codecov.io/github/jondeuce/DECAES.jl/branch/master/graph/badge.svg)](https://codecov.io/github/jondeuce/DECAES.jl/branch/master) -->
 
-If you use DECAES in your research, please cite the following:
+Refer to the [DECAES documentation](https://jondeuce.github.io/DECAES.jl/dev) for in-depth descriptions of the command line interface, a Julia API reference for using DECAES from within Julia, and DECAES internals and algorithmic details.
 
-[![Z Med Phys](https://cdn.ncbi.nlm.nih.gov/corehtml/query/egifs/https:--linkinghub.elsevier.com-ihub-images-PubMedLink.gif)](https://doi.org/10.1016/j.zemedi.2020.04.001)
+If you use DECAES in your research, please [cite our work](https://doi.org/10.1016/j.zemedi.2020.04.001):
 
 ```tex
 @article{DECAES.jl-2020,
@@ -69,6 +72,7 @@ $ decaes \ # run CLI launcher script stored in ~/.julia/bin
 
 Cloning this repository is not necessary to use DECAES.
 However, this repository provides the following items which may prove useful to new users of the package:
+
 * Example MWI data, brain masks, and a corresponding `examples.sh` script illustrating how to process the example data
 * The `decaes.m` MATLAB function for installing DECAES and calling DECAES from MATLAB
 
@@ -76,7 +80,7 @@ Clone this repository using `git clone https://github.com/jondeuce/mwiexamples.g
 
 ### Downloading Julia
 
-To use DECAES, Julia version 1.9.0 or higher is required. We recommend always installing the *latest version* of Julia via the [`juliaup`](https://github.com/JuliaLang/juliaup) official cross-platform Julia installer. Please refer to the [Julia downloads page](https://julialang.org/downloads/) for installation instructions.
+To use DECAES, Julia version 1.9 or higher is required. We recommend always installing the *latest version* of Julia via the [`juliaup`](https://github.com/JuliaLang/juliaup) official cross-platform Julia installer. Please refer to the [Julia downloads page](https://julialang.org/downloads/) for installation instructions.
 
 ### Installing DECAES (Command Line Interface)
 
