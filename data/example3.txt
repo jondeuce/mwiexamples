@@ -22,5 +22,5 @@
 200e-3
 --Reg
 chi2
---Chi2Factor
+--RegParams
 1.02

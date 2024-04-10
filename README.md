@@ -90,7 +90,7 @@ Using Julia v1.9 or later you can install DECAES as follows:
 $ julia --project=@decaes -e 'import Pkg; Pkg.add("DECAES"); Pkg.build("DECAES")'
 ```
 
-This will add DECAES.jl to a named Julia project environment separate from your global environment, and build the `decaes` executable at `~/.julia/bin` for running DECAES from the command line.
+This will add DECAES.jl to a named Julia project environment separate from your global environment, and build the `decaes` launcher script at `~/.julia/bin` for running DECAES from the command line.
 
 Simiarly, DECAES can be updated to the latest version via
 
@@ -132,7 +132,7 @@ These parameters should be set carefully according to the scan parameters used w
 
 There are two equivalent ways to use the [command line interface (CLI)](https://jondeuce.github.io/DECAES.jl/dev/cli), assuming DECAES is already installed:
 
-**1. (Recommended) `decaes` launcher:** Use the executable `~/.julia/bin/decaes` which comes with DECAES:
+**1. (Recommended) `decaes` launcher:** Use the script `~/.julia/bin/decaes` which comes with DECAES:
 
 ```bash
 $ decaes <COMMAND LINE ARGS>
@@ -223,7 +223,7 @@ $ decaes \
 > data/images/image-194x110x1x56.nii.gz \
 > data/images/image-194x110x8x56.nii.gz \
 > --T2map --T2part --TE 7e-3 --nT2 40 \
-> --T2Range 7e-3 2.0 --SPWin 7e-3 25e-3 --MPWin 25e-3 200e-3 --Reg chi2 --Chi2Factor 1.02 \
+> --T2Range 7e-3 2.0 --SPWin 7e-3 25e-3 --MPWin 25e-3 200e-3 --Reg chi2 --RegParams 1.02 \
 > --mask \
 > data/masks/image-194x110x1x56_mask.nii.gz \
 > data/masks/image-194x110x8x56_mask.nii.gz \
@@ -254,7 +254,7 @@ For example, one may wish to compare regularization methods or change the number
 This can be easily done by passing in extra parameters to override default settings stored in a settings file:
 
 ```bash
-$ decaes @data/example1.txt --Reg gcv --nT2 60
+$ decaes @data/example1.txt --Reg gcv
 ```
 
 ## MATLAB Interface
