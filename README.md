@@ -295,15 +295,19 @@ As an illustration, here is a comparison between DECAES and [UBC MWF MATLAB tool
 
 <center>
 
-| Dataset     | Matrix Size     | CPU                | Cores | Threads | MATLAB     | **DECAES** |
-| :---:       | :---:           | :---:              | :---: | :---:   | :---:      | :---:      |
-| 48-echo MSE | 240 x 240 x 48  | Intel i5 4200U     | 2     | 4       | 4h:35m:18s | **6m:42s** |
-| 56-echo MSE | 240 x 240 x 113 | Intel i7-3770K     | 4     | 8       | --         | **5m:39s** |
-| 48-echo MSE | 240 x 240 x 48  | Intel i7-3770K     | 4     | 8       | --         | **3m:07s** |
-| 56-echo MSE | 240 x 240 x 113 | Intel Xeon E5-2640 | 12    | 24      | 1h:25m:01s | **2m:20s** |
-| 48-echo MSE | 240 x 240 x 48  | Intel Xeon E5-2640 | 12    | 24      | 59m:40s    | **1m:24s** |
-| 56-echo MSE | 240 x 240 x 113 | AMD Ryzen 9 3950X  | 16    | 32      | 22m:33s    | **34s**    |
-| 48-echo MSE | 240 x 240 x 48  | AMD Ryzen 9 3950X  | 16    | 32      | 17m:56s    | **21s**    |
+| Dataset     | Matrix Size     | CPU                          | Cores | Threads | MATLAB     | **DECAES** |
+| :---:       | :---:           | :---:                        | :---: | :---:   | :---:      | :---:      |
+| 56-echo MSE | 240 x 240 x 113 | Intel Xeon E5-2640           | 12    | 24      | 1h:25m:01s | **1m:07s** |
+| 48-echo MSE | 240 x 240 x 48  | Intel Xeon E5-2640           | 12    | 24      | 59m:40s    | **40s**    |
+| 56-echo MSE | 240 x 240 x 113 | AMD Ryzen 9 3950X            | 16    | 32      | 22m:33s    | **15.6s**  |
+| 48-echo MSE | 240 x 240 x 48  | AMD Ryzen 9 3950X            | 16    | 32      | 17m:56s    | **9.3s**   |
+| 56-echo MSE | 240 x 240 x 113 | AMD Ryzen Threadripper 3970X | 16    | 32      | --         | **7.7s**   |
+| 48-echo MSE | 240 x 240 x 48  | AMD Ryzen Threadripper 3970X | 16    | 32      | --         | **4.3s**   |
+<!-- | 48-echo MSE | 240 x 240 x 48  | Intel i5 4200U          | 2     | 4       | 4h:35m:18s | **6m:42s** | -->
+<!-- | 56-echo MSE | 240 x 240 x 113 | Intel i7-3770K          | 4     | 8       | --         | **5m:39s** | -->
+<!-- | 48-echo MSE | 240 x 240 x 48  | Intel i7-3770K          | 4     | 8       | --         | **3m:07s** | -->
+<!-- | 56-echo MSE | 240 x 240 x 113 | Intel i9-12900K         | 12    | 24      | --         | **15.4s**  | -->
+<!-- | 48-echo MSE | 240 x 240 x 48  | Intel i9-12900K         | 12    | 24      | --         | **9.2s**   | -->
 
 </center>
 
@@ -312,10 +316,3 @@ Benchmarking notes:
 * MATLAB scripts used were from the `MWI_NNLS_toolbox_0319` subfolder of the [ubcmwf github repository](https://github.com/ubcmri/ubcmwf)
 * Both MATLAB and DECAES made use of precomputed brain masks to skip voxels outside of the brain
 * Image loading time and MATLAB/Julia startup time are not included
-
-General Julia notes:
-
-* Julia is a ["just-ahead-of-time" compiled language](https://www.youtube.com/watch?v=7KGZ_9D_DbI), residing in between ahead-of-time (AOT) and just-in-time (JIT) compiled languages
-* Because of this, the first time DECAES is installed and run there may be several minutes of installation and compilation delay before processing starts
-* Subsequent runs are much faster, typically requiring only a few seconds to start Julia and load DECAES before processing begins
-* For applications like DECAES, much of the "just-ahead-of-time" compilation can be cached during installation, making Julia apps competitive with fast compiled languages like C/C++ and Fortran
